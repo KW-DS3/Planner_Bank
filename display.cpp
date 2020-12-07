@@ -1,5 +1,7 @@
 #include "display.hpp"
 #include "kbhit.h"
+#include "planner.hpp"
+
 #include <cstring>
 #include <iostream>
 #include <stdio.h>
@@ -23,13 +25,14 @@ void print(int location, int color, string text) {
     }
 }
 
-// print fgColored text with bgcolor
+// print fgColored text with bgcolored background
 void printWithBg(int fgColor, int bgColor, string text) {
     cout << begin << fgColor << ";" << bgColor + 10 << "m" << text << end;
 }
 
 // clear the terminal and print 40*130 colored screen
 void resetDisplay() {
+    gotoxy(0, 0);
     system("clear");
 
     for (int i = 0; i < 40; i++) {
@@ -39,6 +42,14 @@ void resetDisplay() {
         cout << endl;
     }
     reset;
+}
+void resetDisplay(int x, int y, int width, int height) {
+    gotoxy(0, 0);
+    for (int i = 0; i < height; i++) {
+        gotoxy(x, y++);
+        for (int j = 0; j < width; j++)
+            print(bg, blue, " ");
+    }
 }
 
 int dayNumber(int day, int month, int year) {
@@ -55,7 +66,7 @@ string getMonthName(int monthNumber) {
     return (months[monthNumber]);
 }
 
-// return how many days are there in the month of year
+// return how many days there are in the month of year
 int numberOfDays(int monthNumber, int year) {
     switch (monthNumber) {
     case 0:
@@ -83,7 +94,7 @@ int numberOfDays(int monthNumber, int year) {
 }
 
 // print calendar for that month
-void printCalendar(int year, int month) {
+void printCalendar(int year, int month, int date) {
     resetDisplay();
 
     int days, k;
@@ -110,10 +121,24 @@ void printCalendar(int year, int month) {
         print(bg, blck, "           ");
 
     for (int j = 1; j <= days; j++) {
-        if (j < 10)
-            printWithBg(whte, blck, "          " + to_string(j));
-        else
-            printWithBg(whte, blck, "         " + to_string(j));
+
+        if (j < 10) {
+            if (date == j) {
+                printWithBg(whte, blck, "          ");
+                // cout << "\033[4;" << whte << ";" << blck + 10 << "m"
+                //      << to_string(j) << end;
+                printWithBg(blue, blck, to_string(j));
+            } else
+                printWithBg(whte, blck, "          " + to_string(j));
+
+        } else {
+            if (date == j) {
+                printWithBg(whte, blck, "         ");
+                printWithBg(blue, blck, to_string(j));
+
+            } else
+                printWithBg(whte, blck, "         " + to_string(j));
+        }
 
         if (++k > 6) {
             k = 0;
@@ -136,33 +161,6 @@ void printCalendar(int year, int month) {
     current = k;
     reset;
     return;
-}
-int chooseMenu() {
-    const int LEDGER = 0;
-    const int PLANNER = 1;
-    int menu = 0;
-    int value;
-
-    firstMenu();
-
-    do {
-        value = kbhit();
-
-        switch (value) {
-        case LEFT: {
-            firstMenuLedger();
-            menu = LEDGER;
-            break;
-        }
-        case RIGHT: {
-            firstMenuPlanner();
-            menu = PLANNER;
-            break;
-        }
-        }
-    } while (value != ENTER);
-
-    return menu;
 }
 
 // print PLANNER BANC
@@ -216,6 +214,35 @@ void firstMenu() {
     firstMenuLedger();
     reset;
 }
+
+int chooseMenu() {
+    const int LEDGER = 0;
+    const int PLANNER = 1;
+    int menu = 0;
+    int value;
+
+    firstMenu();
+
+    do {
+        value = kbhit();
+
+        switch (value) {
+        case LEFT: {
+            firstMenuLedger();
+            menu = LEDGER;
+            break;
+        }
+        case RIGHT: {
+            firstMenuPlanner();
+            menu = PLANNER;
+            break;
+        }
+        }
+    } while (value != ENTER);
+
+    return menu;
+}
+
 void firstMenuLedger(void) {
     gotoxy(45, 30);
     print(bg, blck, "                             ");
@@ -236,88 +263,108 @@ void firstMenuPlanner(void) {
     printWithBg(blue, blck, "> PLANNER");
     reset;
 }
+int choosePlannerMenu(int year, int month, int date) {
 
-int getLongestLength(vector<string> categories) {
-    int max = 0;
-    for (int i = 0; i < categories.size(); i++) {
-        if (max < categories[i].length()) {
-            max = categories[i].length();
+    int menu = 0, value, index = 0;
+    int updown = 0;
+    int num = numOfEvents(year, month, date);
+    plannerMenuCreate();
+    do {
+
+        value = kbhit();
+        if (value == ENTER && updown == 1) {
+            markEvent(year, month, date, index);
+            printList(year, month, date);
         }
-    }
-    return max;
-}
 
-// function for scaling
-void setRatio(vector<int> &ratio, const vector<int> money) {
-    int max = 0;
-    int sum = 0;
-
-    for (int i = 0; i < money.size(); i++) {
-        sum += money[i];
-
-        if (max < money[i])
-            max = money[i];
-    }
-    int maxPercentage = max * 100 / sum;
-
-    for (int i = 0; i < money.size(); i++) {
-        ratio.push_back(money[i] * 100 / sum);
-    }
-}
-
-// function for scaling
-int getMaxPercentage(const vector<int> ratio) {
-    int maxPercentage;
-
-    for (int i = 0; i < ratio.size(); i++) {
-        if (maxPercentage < ratio[i])
-            maxPercentage = ratio[i];
-    }
-    return maxPercentage;
-}
-
-// print the ratio of money spent in the month
-void printRatio(vector<string> categories, vector<int> money) {
-    resetDisplay();
-    //일단
-    categories.push_back("옷");
-    categories.push_back("식비");
-    categories.push_back("생필품");
-    categories.push_back("책");
-    categories.push_back("카페");
-
-    money.push_back(10000);
-    money.push_back(30000);
-    money.push_back(10000);
-    money.push_back(5000);
-    money.push_back(3000);
-
-    //예시로 담아봄
-
-    int x = 40;
-    int y = 10;
-    int sum = 0;
-    int maxLength = getLongestLength(categories);
-
-    vector<int> ratio;
-    setRatio(ratio, money);
-
-    int maxPercentage = getMaxPercentage(ratio);
-
-    for (int i = 0; i < categories.size(); i++) {
-        gotoxy(x, y);
-
-        for (int j = 0; j < (maxLength - categories[i].length()) / 3; j++) {
-            print(bg, blck, "  ");
+        switch (value) {
+        case LEFT: {
+            updown = 0;
+            if (menu == 0)
+                menu = 3;
+            else
+                menu--;
+            break;
         }
-        printWithBg(whte, blck, categories[i]);
-        printWithBg(whte, blck, " |  ");
-
-        for (int j = 0; j < ratio[i] * 50 / maxPercentage; j++) {
-            print(bg, blue, " ");
+        case RIGHT: {
+            updown = 0;
+            if (menu == 3)
+                menu = 0;
+            else
+                menu++;
+            break;
         }
-        gotoxy(x + 61, y);
-        printWithBg(whte, blck, '(' + to_string(ratio[i]) + "%) ");
-        y += 2;
-    }
+        case UP: {
+            if (index == 1)
+                index = num;
+            else
+                index--;
+
+            break;
+        }
+        case DOWN: {
+            updown = 1;
+
+            if (index == num)
+                index = 1;
+            else
+                index++;
+            break;
+        }
+        }
+        switch (menu) {
+        case CREATE:
+            plannerMenuCreate();
+            break;
+        case DELETE:
+            plannerMenuDelete();
+            break;
+        case GOTODATE:
+            plannerMenuGotoDate();
+            break;
+        case PREVIOUS:
+            plannerMenuPrevious();
+            break;
+        }
+        if (updown == 1) {
+            resetDisplay(93, 12, 1, (num + 1) * 2);
+            gotoxy(93, 12 + 2 * index);
+            printWithBg(whte, blck, ">");
+        }
+
+    } while (value != ENTER || updown == 1);
+
+    return menu;
+}
+int chooseEvent(int year, int month, int date) {
+    int value;
+    int index = 1;
+    int num = numOfEvents(year, month, date);
+    do {
+        gotoxy(93, 12 + 2 * index);
+        printWithBg(whte, blck, ">");
+        value = kbhit();
+
+        switch (value) {
+        case UP: {
+            if (index == 1)
+                index = num;
+            else
+                index--;
+
+            break;
+        }
+        case DOWN: {
+            if (index == num)
+                index = 1;
+            else
+                index++;
+            break;
+        }
+        }
+        resetDisplay(93, 12, 1, (num + 1) * 2);
+
+    } while (value != ENTER);
+
+    return index;
 }

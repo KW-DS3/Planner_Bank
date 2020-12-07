@@ -27,24 +27,20 @@ void print(int location, int color, std::string text);
 void printWithBg(int fgColor, int bgColor, std::string text);
 
 void resetDisplay();
+void resetDisplay(int x, int y, int width, int height);
 
 int dayNumber(int day, int month, int year);
 std::string getMonthName(int monthNumber);
 int numberOfDays(int monthNumber, int year);
 
-void printCalendar(int year, int month);
+void printCalendar(int year, int month, int date);
 
 int chooseMenu();
 void firstMenu();
 void firstMenuLedger();
 void firstMenuPlanner();
-void plannerMenu();
 
-void setRatio(std::vector<int> &ratio, const std::vector<int> money);
+int choosePlannerMenu(int year, int month, int date);
 
-int getLongestLength(std::vector<std::string> categories);
-int getMaxPercentage(const std::vector<int> ratio);
-
-void printRatio(std::vector<std::string> categories, std::vector<int> money);
-
+int chooseEvent(int year, int month, int date);
 #endif
