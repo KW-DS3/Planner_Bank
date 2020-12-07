@@ -48,7 +48,7 @@ void resetDisplay(int x, int y, int width, int height) {
     for (int i = 0; i < height; i++) {
         gotoxy(x, y++);
         for (int j = 0; j < width; j++)
-            print(bg, blue, " ");
+            print(bg, blck, " ");
     }
 }
 
