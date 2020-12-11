@@ -69,27 +69,23 @@ string getMonthName(int monthNumber) {
 // return how many days there are in the month of year
 int numberOfDays(int monthNumber, int year) {
     switch (monthNumber) {
-    case 0:
+    case 1: return (31);break;
     case 2:
-    case 4:
-    case 6:
-    case 7:
-    case 9:
-    case 11:
-        return (31);
-        break;
-    case 1:
         if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0))
             return (29);
         else
             return (28);
         break;
-    case 3:
-    case 5:
-    case 8:
-    case 10:
-        return (30);
-        break;
+    case 3: return (31);break;
+    case 4:return (30);break;
+    case 5: return (31);break;
+    case 6:return (30);break;
+    case 7: return (31);break;
+    case 8: return (31);break;
+    case 9:return (30);break;
+    case 10: return (31);break;
+    case 11: return (30);break;
+    case 12:  return (31);break;
     }
 }
 
@@ -270,7 +266,6 @@ int choosePlannerMenu(int year, int month, int date) {
     int num = numOfEvents(year, month, date);
     plannerMenuCreate();
     do {
-
         value = kbhit();
         if (value == ENTER && updown == 1) {
             markEvent(year, month, date, index);
@@ -281,14 +276,14 @@ int choosePlannerMenu(int year, int month, int date) {
         case LEFT: {
             updown = 0;
             if (menu == 0)
-                menu = 3;
+                menu = 4;
             else
                 menu--;
             break;
         }
         case RIGHT: {
             updown = 0;
-            if (menu == 3)
+            if (menu == 4)
                 menu = 0;
             else
                 menu++;
@@ -325,6 +320,9 @@ int choosePlannerMenu(int year, int month, int date) {
         case PREVIOUS:
             plannerMenuPrevious();
             break;
+        case KEYWORD:
+            plannerMenuKeyword();
+            break;
         }
         if (updown == 1) {
             resetDisplay(93, 12, 1, (num + 1) * 2);
@@ -341,7 +339,7 @@ int chooseEvent(int year, int month, int date) {
     int index = 1;
     int num = numOfEvents(year, month, date);
     do {
-        gotoxy(93, 12 + 2 * index);
+        gotoxy(93, 14 + 2 * index);
         printWithBg(whte, blck, ">");
         value = kbhit();
 

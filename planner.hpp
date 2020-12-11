@@ -40,6 +40,7 @@ enum plannerMenu {
     DELETE,
     GOTODATE,
     PREVIOUS,
+    KEYWORD,
 };
 
 bool is_stringEmpty(char *buf);
@@ -58,6 +59,7 @@ void plannerMenuCreate();
 void plannerMenuGotoDate();
 void plannerMenuDelete();
 void plannerMenuPrevious();
+void plannerMenuKeyword();
 
 void printNothingToDo();
 

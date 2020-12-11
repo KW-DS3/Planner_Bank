@@ -44,14 +44,14 @@ string convert(int date) {
 void Todo::inputEvent() {
 
     while (1) {
-        resetDisplay(97, 7, 28, 3);
+        resetDisplay(97, 7, 28, 5);
 
         gotoxy(97, 7);
         printWithBg(whte, blck, "date: ");
         cin >> when.year >> when.month >> when.date;
         if (when.month < 0 || when.month > 13 || when.date < 0 ||
             when.date > numberOfDays(when.month, when.year)) {
-            resetDisplay(9, 7, 28, 3);
+
             gotoxy(95, 8);
             printWithBg(whte, blck, "wrong input! try again");
             continue;
@@ -62,6 +62,9 @@ void Todo::inputEvent() {
     gotoxy(97, 9);
     printWithBg(whte, blck, "title: ");
     cin >> title;
+
+    gotoxy(97, 11);
+    printWithBg(whte, blck, "keyword: ");
 
     setDate(when.year, when.month, when.date);
     setTitle(title);
@@ -182,8 +185,8 @@ void printList(int year, int month, int date) {
         perror("open() error!");
         exit(-1);
     }
+    y = 14;
     gotoxy(102, y);
-    y += 2;
     printWithBg(blue, blck, "[ TO-DO LIST ]");
 
     do {
@@ -194,8 +197,8 @@ void printList(int year, int month, int date) {
         }
         if (rSize < 1)
             break;
-        gotoxy(95, y);
         y += 2;
+        gotoxy(95, y);
         printWithBg(whte, blck, "☐  ");
         printWithBg(whte, blck, buf);
 
@@ -270,7 +273,7 @@ void markEvent(int year, int month, int date, int index) {
 }
 
 void plannerMenuCreate() {
-    resetDisplay(97, 7, 32, 3);
+    resetDisplay(97, 7, 32, 5);
     gotoxy(97, 7);
     printWithBg(blue, blck, "> Create");
     gotoxy(97, 9);
@@ -279,10 +282,11 @@ void plannerMenuCreate() {
     printWithBg(whte, blck, "  Delete");
     gotoxy(112, 9);
     printWithBg(whte, blck, "  Previous");
+    gotoxy(97, 11);
+    printWithBg(whte, blck, "  Keyword");
 }
 void plannerMenuGotoDate() {
-    resetDisplay(97, 7, 32, 3);
-
+    resetDisplay(97, 7, 32, 5);
     gotoxy(97, 7);
     printWithBg(whte, blck, "  Create");
     gotoxy(97, 9);
@@ -291,21 +295,11 @@ void plannerMenuGotoDate() {
     printWithBg(whte, blck, "  Delete");
     gotoxy(112, 9);
     printWithBg(whte, blck, "  Previous");
-}
-void plannerMenuPrevious() {
-    resetDisplay(97, 7, 32, 3);
-    gotoxy(97, 7);
-    printWithBg(whte, blck, "  Create");
-    gotoxy(97, 9);
-    printWithBg(whte, blck, "  Go to date");
-    gotoxy(112, 7);
-    printWithBg(whte, blck, "  Delete");
-    gotoxy(112, 9);
-    printWithBg(blue, blck, "> Previous");
+    gotoxy(97, 11);
+    printWithBg(whte, blck, "  Keyword");
 }
 void plannerMenuDelete() {
-    resetDisplay(97, 7, 32, 3);
-
+    resetDisplay(97, 7, 32, 5);
     gotoxy(97, 7);
     printWithBg(whte, blck, "  Create");
     gotoxy(97, 9);
@@ -314,6 +308,35 @@ void plannerMenuDelete() {
     printWithBg(blue, blck, "> Delete");
     gotoxy(112, 9);
     printWithBg(whte, blck, "  Previous");
+    gotoxy(97, 11);
+    printWithBg(whte, blck, "  Keyword");
+}
+void plannerMenuPrevious() {
+    resetDisplay(97, 7, 32, 5);
+    gotoxy(97, 7);
+    printWithBg(whte, blck, "  Create");
+    gotoxy(97, 9);
+    printWithBg(whte, blck, "  Go to date");
+    gotoxy(112, 7);
+    printWithBg(whte, blck, "  Delete");
+    gotoxy(112, 9);
+    printWithBg(blue, blck, "> Previous");
+    gotoxy(97, 11);
+    printWithBg(whte, blck, "  Keyword");
+}
+void plannerMenuKeyword() {
+    resetDisplay(97, 7, 32, 5);
+
+    gotoxy(97, 7);
+    printWithBg(whte, blck, "  Create");
+    gotoxy(97, 9);
+    printWithBg(whte, blck, "  Go to date");
+    gotoxy(112, 7);
+    printWithBg(whte, blck, "  Delete");
+    gotoxy(112, 9);
+    printWithBg(whte, blck, "  Previous");
+    gotoxy(97, 11);
+    printWithBg(blue, blck, " >Keyword");
 }
 
 int numOfEvents(int year, int month, int date) {

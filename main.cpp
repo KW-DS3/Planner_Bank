@@ -48,6 +48,8 @@ int main(void) {
                 case PREVIOUS:
                     goto END;
                     break;
+                case KEYWORD:
+                    break;
                 }
             }
         END:;
