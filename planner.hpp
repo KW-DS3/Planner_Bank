@@ -33,6 +33,7 @@ class Todo {
     std::string category;
     When when;
     std::string title;
+    std::string keyword;
 };
 
 enum plannerMenu {

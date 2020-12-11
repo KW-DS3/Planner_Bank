@@ -49,11 +49,11 @@ void Todo::inputEvent() {
         gotoxy(97, 7);
         printWithBg(whte, blck, "date: ");
         cin >> when.year >> when.month >> when.date;
-        if (when.month < 0 || when.month > 13 || when.date < 0 ||
+        if (when.month < 0 || when.month > 12 || when.date < 0 ||
             when.date > numberOfDays(when.month, when.year)) {
 
-            gotoxy(95, 8);
-            printWithBg(whte, blck, "wrong input! try again");
+            //gotoxy(95, 8);
+            //printWithBg(whte, blck, "wrong input! try again");
             continue;
         } else
             break;
@@ -65,6 +65,7 @@ void Todo::inputEvent() {
 
     gotoxy(97, 11);
     printWithBg(whte, blck, "keyword: ");
+    cin >> keyword;
 
     setDate(when.year, when.month, when.date);
     setTitle(title);
