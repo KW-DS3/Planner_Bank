@@ -306,7 +306,7 @@ int choosePlannerMenu(int year, int month, int date) {
                 index++;
             break;
         }
-        }
+        } //switch (value)
         switch (menu) {
         case CREATE:
             plannerMenuCreate();
@@ -323,10 +323,11 @@ int choosePlannerMenu(int year, int month, int date) {
         case KEYWORD:
             plannerMenuKeyword();
             break;
-        }
+        } //switch (menu)
+
         if (updown == 1) {
             resetDisplay(93, 12, 1, (num + 1) * 2);
-            gotoxy(93, 12 + 2 * index);
+            gotoxy(93, 14 + 2 * index);
             printWithBg(whte, blck, ">");
         }
 
@@ -360,7 +361,7 @@ int chooseEvent(int year, int month, int date) {
             break;
         }
         }
-        resetDisplay(93, 12, 1, (num + 1) * 2);
+        resetDisplay(93, 14, 1, (num + 1) * 2);
 
     } while (value != ENTER);
 

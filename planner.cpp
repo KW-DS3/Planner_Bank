@@ -168,7 +168,7 @@ string deleteEvent(int year, int month, int date, int index) {
     return eventToDelete;
 }
 void printList(int year, int month, int date) {
-    int fd, y = 12;
+    int fd, y = 14;
     string dirname = convert(year) + convert(month) + convert(date);
     string pathname = dirname + '/' + INCOMPLETE;
     ssize_t rSize = 0;
@@ -176,8 +176,12 @@ void printList(int year, int month, int date) {
 
     resetDisplay(95, 12, 33, 20);
 
+    gotoxy(102, y);
+    printWithBg(blue, blck, "[ TO-DO LIST ]");
+
     if (!checkFileExists(dirname)) {
-        printNothingToDo();
+        gotoxy(103, 16);
+        printWithBg(whte, blck, "nothing to do");
         return;
     }
     char *buf = (char *)malloc(MAX_BUF_SIZE);
@@ -186,9 +190,6 @@ void printList(int year, int month, int date) {
         perror("open() error!");
         exit(-1);
     }
-    y = 14;
-    gotoxy(102, y);
-    printWithBg(blue, blck, "[ TO-DO LIST ]");
 
     do {
         memset(buf, '\0', MAX_BUF_SIZE);
@@ -225,9 +226,9 @@ void printList(int year, int month, int date) {
         if (rSize < 1)
             break;
         gotoxy(95, y);
-        y += 2;
+        //y += 2;
         printWithBg(whte, blck, "✓  ");
-        printWithBg(whte, blck, buf);
+        //printWithBg(whte, blck, buf);
 
     } while (rSize > 0);
 
@@ -425,11 +426,4 @@ bool checkFileExists(std::string filename) {
         return 0;
     }
     return 1;
-}
-
-void printNothingToDo() {
-    gotoxy(102, 14);
-    printWithBg(blue, blck, "[ TO-DO LIST ]");
-    gotoxy(103, 16);
-    printWithBg(whte, blck, "nothing to do");
 }
