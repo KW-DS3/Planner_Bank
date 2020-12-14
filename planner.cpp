@@ -69,6 +69,7 @@ void Todo::inputEvent() {
 
     setDate(when.year, when.month, when.date);
     setTitle(title);
+    //setKeyword(title, keyword);
     cin.ignore();
 }
 
@@ -174,7 +175,7 @@ void printList(int year, int month, int date) {
     ssize_t rSize = 0;
     struct stat statBuf;
 
-    resetDisplay(95, 12, 33, 20);
+    resetDisplay(95, 14, 33, 20);
 
     gotoxy(102, y);
     printWithBg(blue, blck, "[ TO-DO LIST ]");
@@ -226,9 +227,9 @@ void printList(int year, int month, int date) {
         if (rSize < 1)
             break;
         gotoxy(95, y);
-        //y += 2;
+        y += 2;
         printWithBg(whte, blck, "✓  ");
-        //printWithBg(whte, blck, buf);
+        printWithBg(whte, blck, buf);
 
     } while (rSize > 0);
 

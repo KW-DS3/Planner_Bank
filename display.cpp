@@ -326,7 +326,7 @@ int choosePlannerMenu(int year, int month, int date) {
         } //switch (menu)
 
         if (updown == 1) {
-            resetDisplay(93, 12, 1, (num + 1) * 2);
+            resetDisplay(93, 14, 1, (num + 1) * 2);
             gotoxy(93, 14 + 2 * index);
             printWithBg(whte, blck, ">");
         }

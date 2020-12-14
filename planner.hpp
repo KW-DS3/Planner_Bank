@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "keyword.hpp"
 
 #define PERMS 0777
 #define MAX_BUF_SIZE 256
