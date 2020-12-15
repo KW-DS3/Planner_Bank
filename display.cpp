@@ -213,7 +213,55 @@ void firstMenu() {
     printWithBg(WHTE, BLCK, "╚════════╝ ╨        ╨ ╨        ╨ ╚═════════");
     gotoxy(45, 30);
 
-    firstMenuLedger();
+    reset;
+}
+
+int chooseLogin() {
+    const int LOGIN = 0;
+    const int SIGNIN = 0;
+    int menu = 0;
+    int value;
+
+    firstMenu();
+    CURSOR_LOGIN();
+    do {
+        value = kbhit();
+
+        switch (value) {
+        case LEFT: {
+            CURSOR_LOGIN();
+            menu = LOGIN;
+            break;
+        }
+        case RIGHT: {
+            CURSOR_SIGNIN();
+            menu = LOGIN;
+            break;
+        }
+        }
+    } while (value != ENTER);
+
+    return menu;
+}
+
+void CURSOR_LOGIN(void) {
+    gotoxy(45, 30);
+    print(BG, BLCK, "                             ");
+    gotoxy(49, 30);
+    printWithBg(BLUE, BLCK, ">  LOGIN");
+    gotoxy(71, 30);
+    printWithBg(WHTE, BLCK, " SIGNIN");
+
+    reset;
+}
+
+void CURSOR_SIGNIN(void) {
+    gotoxy(45, 30);
+    print(BG, BLCK, "                             ");
+    gotoxy(51, 30);
+    printWithBg(WHTE, BLCK, " LOGIN");
+    gotoxy(70, 30);
+    printWithBg(BLUE, BLCK, "> SIGNIN");
     reset;
 }
 
@@ -224,6 +272,7 @@ int chooseMenu() {
     int value;
 
     firstMenu();
+    firstMenuLedger();
 
     do {
         value = kbhit();
