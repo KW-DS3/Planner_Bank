@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-#define begin "\033[1;"
-#define end "\033[0m"
+const std::string BEGIN = "\033[1;";
+const std::string END = "\033[0m";
 #define blck 30
 #define red 31
 #define gren 32
@@ -19,9 +19,9 @@
 #define whte 37
 #define fg 10
 #define bg 11
-#define reset gotoxy(0, 0)
 
 void gotoxy(int x, int y);
+void reset();
 
 void print(int location, int color, std::string text);
 void printWithBg(int fgColor, int bgColor, std::string text);
