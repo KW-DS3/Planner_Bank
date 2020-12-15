@@ -70,7 +70,7 @@ string getMonthName(int monthNumber) {
 
 // return how many days there are in the month of year
 int numberOfDays(int monthNumber, int year) {
-    switch (monthNumber) {
+    switch (monthNumber - 1) {
     case 0:
     case 2:
     case 4:
@@ -103,7 +103,7 @@ void printCalendar(int year, int month, int date) {
     int current = dayNumber(1, month, year);
     string monthAndYear = getMonthName(month - 1) + ' ' + to_string(year);
 
-    days = numberOfDays(month - 1, year);
+    days = numberOfDays(month, year);
 
     gotoxy(38, 3);
     printWithBg(WHTE, BLCK, "[ " + monthAndYear + " ]");
