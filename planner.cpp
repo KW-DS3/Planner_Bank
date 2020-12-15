@@ -182,7 +182,7 @@ void printList(int year, int month, int date) {
     ssize_t rSize = 0;
     struct stat statBuf;
 
-    resetDisplay(95, 14, 33, 20);
+    resetDisplay(93, 7, 35, 27);
 
     gotoxy(102, y);
     printWithBg(BLUE, BLCK, "[ TO-DO LIST ]");
@@ -284,6 +284,7 @@ void markEvent(int year, int month, int date, int index) {
         exit(-2);
     }
     close(fd);
+    resetDisplay(93, 14, 1, 15);
 }
 
 void plannerMenuCreate() {
@@ -350,7 +351,7 @@ void plannerMenuKeyword() {
     gotoxy(112, 9);
     printWithBg(WHTE, BLCK, "  Previous");
     gotoxy(97, 11);
-    printWithBg(BLUE, BLCK, " >Keyword");
+    printWithBg(BLUE, BLCK, " > Keyword");
 }
 
 int numOfEvents(int year, int month, int date) {
