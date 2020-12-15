@@ -9,16 +9,16 @@
 
 const std::string BEGIN = "\033[1;";
 const std::string END = "\033[0m";
-#define blck 30
-#define red 31
-#define gren 32
-#define yllw 33
-#define blue 34
-#define mgnt 35
-#define cyan 36
-#define whte 37
-#define fg 10
-#define bg 11
+#define BLCK 30
+#define RED 31
+#define GREN 32
+#define YLLW 33
+#define BLUE 34
+#define MGNT 35
+#define CYAN 36
+#define WHTE 37
+#define FG 10
+#define BG 11
 
 void gotoxy(int x, int y);
 void reset();

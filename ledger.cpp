@@ -76,16 +76,16 @@ void printRatio(vector<string> categories, vector<int> money) {
         gotoxy(x, y);
 
         for (int j = 0; j < (maxLength - categories[i].length()) / 3; j++) {
-            print(bg, blck, "  ");
+            print(BG, BLCK, "  ");
         }
-        printWithBg(whte, blck, categories[i]);
-        printWithBg(whte, blck, " |  ");
+        printWithBg(WHTE, BLCK, categories[i]);
+        printWithBg(WHTE, BLCK, " |  ");
 
         for (int j = 0; j < ratio[i] * 50 / maxPercentage; j++) {
-            print(bg, blue, " ");
+            print(BG, BLUE, " ");
         }
         gotoxy(x + 61, y);
-        printWithBg(whte, blck, '(' + to_string(ratio[i]) + "%) ");
+        printWithBg(WHTE, BLCK, '(' + to_string(ratio[i]) + "%) ");
         y += 2;
     }
 }

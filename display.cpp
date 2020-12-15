@@ -17,10 +17,10 @@ void gotoxy(int x, int y) { printf("%c[%d;%df", 0x1B, y, x); }
 void reset() { gotoxy(0, 0); }
 
 void print(int location, int color, string text) {
-    if (location == fg) {
+    if (location == FG) {
         cout << BEGIN << color << "m";
         cout << text << END;
-    } else if (location == bg) {
+    } else if (location == BG) {
 
         cout << BEGIN << color + 10 << "m";
         cout << text << END;
@@ -39,7 +39,7 @@ void resetDisplay() {
 
     for (int i = 0; i < 40; i++) {
         for (int j = 0; j < 130; j++) {
-            print(bg, blck, " ");
+            print(BG, BLCK, " ");
         }
         cout << endl;
     }
@@ -50,7 +50,7 @@ void resetDisplay(int x, int y, int width, int height) {
     for (int i = 0; i < height; i++) {
         gotoxy(x, y++);
         for (int j = 0; j < width; j++)
-            print(bg, blck, " ");
+            print(BG, BLCK, " ");
     }
 }
 
@@ -106,47 +106,47 @@ void printCalendar(int year, int month, int date) {
     days = numberOfDays(month - 1, year);
 
     gotoxy(38, 3);
-    printWithBg(whte, blck, "[ " + monthAndYear + " ]");
+    printWithBg(WHTE, BLCK, "[ " + monthAndYear + " ]");
     reset;
     gotoxy(11, 6);
-    printWithBg(red, blck, "S");
+    printWithBg(RED, BLCK, "S");
     printWithBg(
-        whte, blck,
+        WHTE, BLCK,
         "          M          T          W          T          F          S");
     gotoxy(9, 7);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "──────────────────────────────────────────────────────────────"
                 "─────────"
                 "───────\n");
 
     for (k = 0; k < current; k++)
-        print(bg, blck, "           ");
+        print(BG, BLCK, "           ");
 
     for (int j = 1; j <= days; j++) {
 
         if (j < 10) {
             if (date == j) {
-                printWithBg(whte, blck, "          ");
-                // cout << "\033[4;" << whte << ";" << blck + 10 << "m"
+                printWithBg(WHTE, BLCK, "          ");
+                // cout << "\033[4;" << WHTE << ";" << BLCK + 10 << "m"
                 //      << to_string(j) << end;
-                printWithBg(blue, blck, to_string(j));
+                printWithBg(BLUE, BLCK, to_string(j));
             } else
-                printWithBg(whte, blck, "          " + to_string(j));
+                printWithBg(WHTE, BLCK, "          " + to_string(j));
 
         } else {
             if (date == j) {
-                printWithBg(whte, blck, "         ");
-                printWithBg(blue, blck, to_string(j));
+                printWithBg(WHTE, BLCK, "         ");
+                printWithBg(BLUE, BLCK, to_string(j));
 
             } else
-                printWithBg(whte, blck, "         " + to_string(j));
+                printWithBg(WHTE, BLCK, "         " + to_string(j));
         }
 
         if (++k > 6) {
             k = 0;
             cout << endl << endl << endl << endl << endl;
 
-            printWithBg(whte, blck,
+            printWithBg(WHTE, BLCK,
                         "        "
                         "─────────────────────────────────────────────────────"
                         "───────────────"
@@ -155,7 +155,7 @@ void printCalendar(int year, int month, int date) {
     }
     if (k)
         cout << endl << endl << endl << endl << endl;
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "        "
                 "──────────────────────────────────────────────────────"
                 "───────────────"
@@ -169,48 +169,48 @@ void printCalendar(int year, int month, int date) {
 void firstMenu() {
     resetDisplay();
     gotoxy(25, 11);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "╔════════╗ ╥          ╔════════╗ ╔════════╗ ╔════════╗ "
                 "╔═════════ ╔════════╗");
     gotoxy(25, 12);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "║        ║ ║          ║        ║ ║        ║ ║        ║ ║      "
                 "    ║        ║");
     gotoxy(25, 13);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "║        ║ ║          ║        ║ ║        ║ ║        ║ ║      "
                 "    ║        ║");
     gotoxy(25, 14);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "╠════════╝ ║          ╠════════╣ ║        ║ ║        ║ "
                 "╠════════╣ ╠════════╗");
     gotoxy(25, 15);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "║          ║          ║        ║ ║        ║ ║        ║ ║      "
                 "    ║        ║");
     gotoxy(25, 16);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "║          ║          ║        ║ ║        ║ ║        ║ ║      "
                 "    ║        ║");
     gotoxy(25, 17);
-    printWithBg(whte, blck,
+    printWithBg(WHTE, BLCK,
                 "╨          ╚════════  ╨        ╨ ╨        ╨ ╨        ╨ "
                 "╚═════════ ╨        ╨");
 
     gotoxy(58, 18);
-    printWithBg(whte, blck, "╔════════╗ ╔════════╗ ╔════════╗ ╔═════════");
+    printWithBg(WHTE, BLCK, "╔════════╗ ╔════════╗ ╔════════╗ ╔═════════");
     gotoxy(58, 19);
-    printWithBg(whte, blck, "║        ║ ║        ║ ║        ║ ║");
+    printWithBg(WHTE, BLCK, "║        ║ ║        ║ ║        ║ ║");
     gotoxy(58, 20);
-    printWithBg(whte, blck, "║        ║ ║        ║ ║        ║ ║");
+    printWithBg(WHTE, BLCK, "║        ║ ║        ║ ║        ║ ║");
     gotoxy(58, 21);
-    printWithBg(whte, blck, "╠════════╝ ╠════════╣ ║        ║ ║");
+    printWithBg(WHTE, BLCK, "╠════════╝ ╠════════╣ ║        ║ ║");
     gotoxy(58, 22);
-    printWithBg(whte, blck, "║        ║ ║        ║ ║        ║ ║");
+    printWithBg(WHTE, BLCK, "║        ║ ║        ║ ║        ║ ║");
     gotoxy(58, 23);
-    printWithBg(whte, blck, "║        ║ ║        ║ ║        ║ ║");
+    printWithBg(WHTE, BLCK, "║        ║ ║        ║ ║        ║ ║");
     gotoxy(58, 24);
-    printWithBg(whte, blck, "╚════════╝ ╨        ╨ ╨        ╨ ╚═════════");
+    printWithBg(WHTE, BLCK, "╚════════╝ ╨        ╨ ╨        ╨ ╚═════════");
     gotoxy(45, 30);
 
     firstMenuLedger();
@@ -247,22 +247,22 @@ int chooseMenu() {
 
 void firstMenuLedger(void) {
     gotoxy(45, 30);
-    print(bg, blck, "                             ");
+    print(BG, BLCK, "                             ");
     gotoxy(49, 30);
-    printWithBg(blue, blck, ">  LEDGER");
+    printWithBg(BLUE, BLCK, ">  LEDGER");
     gotoxy(71, 30);
-    printWithBg(whte, blck, " PLANNER");
+    printWithBg(WHTE, BLCK, " PLANNER");
 
     reset;
 }
 
 void firstMenuPlanner(void) {
     gotoxy(45, 30);
-    print(bg, blck, "                             ");
+    print(BG, BLCK, "                             ");
     gotoxy(51, 30);
-    printWithBg(whte, blck, " LEDGER");
+    printWithBg(WHTE, BLCK, " LEDGER");
     gotoxy(70, 30);
-    printWithBg(blue, blck, "> PLANNER");
+    printWithBg(BLUE, BLCK, "> PLANNER");
     reset;
 }
 int choosePlannerMenu(int year, int month, int date) {
@@ -334,7 +334,7 @@ int choosePlannerMenu(int year, int month, int date) {
         if (updown == 1) {
             resetDisplay(93, 14, 1, (num + 1) * 2);
             gotoxy(93, 14 + 2 * index);
-            printWithBg(whte, blck, ">");
+            printWithBg(WHTE, BLCK, ">");
         }
 
     } while (value != ENTER || updown == 1);
@@ -347,7 +347,7 @@ int chooseEvent(int year, int month, int date) {
     int num = numOfEvents(year, month, date);
     do {
         gotoxy(93, 14 + 2 * index);
-        printWithBg(whte, blck, ">");
+        printWithBg(WHTE, BLCK, ">");
         value = kbhit();
 
         switch (value) {

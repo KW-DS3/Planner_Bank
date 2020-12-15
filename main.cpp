@@ -27,7 +27,7 @@ int main(void) {
         printCalendar(year, month, date);
         if (menu == LEDGER) {
 
-            /* 가계부 */
+            /* LEDGER */
 
         } else if (menu == PLANNER) {
 
