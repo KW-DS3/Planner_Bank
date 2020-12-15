@@ -50,7 +50,7 @@ void resetDisplay(int x, int y, int width, int height) {
     for (int i = 0; i < height; i++) {
         gotoxy(x, y++);
         for (int j = 0; j < width; j++)
-            print(BG, BLCK, " ");
+            print(BG, BLUE, " ");
     }
 }
 
@@ -248,9 +248,9 @@ void CURSOR_LOGIN(void) {
     gotoxy(45, 30);
     print(BG, BLCK, "                             ");
     gotoxy(49, 30);
-    printWithBg(BLUE, BLCK, ">  LOGIN");
+    printWithBg(BLUE, BLCK, ">  LOG IN");
     gotoxy(71, 30);
-    printWithBg(WHTE, BLCK, " SIGNIN");
+    printWithBg(WHTE, BLCK, " SIGN IN");
 
     reset;
 }
@@ -259,9 +259,9 @@ void CURSOR_SIGNIN(void) {
     gotoxy(45, 30);
     print(BG, BLCK, "                             ");
     gotoxy(51, 30);
-    printWithBg(WHTE, BLCK, " LOGIN");
+    printWithBg(WHTE, BLCK, " LOG IN");
     gotoxy(70, 30);
-    printWithBg(BLUE, BLCK, "> SIGNIN");
+    printWithBg(BLUE, BLCK, "> SIGN IN");
     reset;
 }
 
@@ -314,6 +314,7 @@ void firstMenuPlanner(void) {
     printWithBg(BLUE, BLCK, "> PLANNER");
     reset;
 }
+
 int choosePlannerMenu(int year, int month, int date) {
 
     int menu = 0, value, index = 0;
@@ -324,6 +325,7 @@ int choosePlannerMenu(int year, int month, int date) {
     do {
         value = kbhit();
 
+        resetDisplay(93, 14, 1, 27);
         if (value == ENTER && updown == 1) {
             markEvent(year, month, date, index);
             printList(year, month, date);
@@ -392,6 +394,7 @@ int choosePlannerMenu(int year, int month, int date) {
 
     return menu;
 }
+//삭제할 이벤트 커서로 고르기
 int chooseEvent(int year, int month, int date) {
     int value;
     int index = 1;
