@@ -25,9 +25,9 @@ void signup() {
             printWithBg(WHTE, BLCK, "You can use this ID!");
             gotoxy(51, 32);
             cin >> pw;
-            // int fd = open(pw.c_str(), O_CREAT | O_WRONLY, PERMS);
-            // close(fd);
-            mkdir(pw.c_str(), PERMS);
+            int fd = open(pw.c_str(), O_CREAT | O_WRONLY, PERMS);
+            close(fd);
+            // mkdir(pw.c_str(), PERMS);
             gotoxy(47, 34);
             printWithBg(WHTE, BLCK, "signin clear! (for next ENTER)");
             kbhit();
@@ -64,8 +64,8 @@ void signin() {
                 kbhit();
                 while (kbhit() != ENTER)
                     ;
-                chdir("..");
-                chdir("..");
+                // chdir("..");
+                // chdir("..");
                 break;
             } else {
                 gotoxy(47, 34);

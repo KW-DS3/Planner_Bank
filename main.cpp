@@ -33,11 +33,21 @@ int main(void) {
                 menu = chooseMenu();
                 printCalendar(year, month, date);
                 if (menu == LEDGER) {
-
+                    if (mkdir("LEDGER", PERMS) == -1) {
+                        chdir("LEDGER");
+                    } else {
+                        mkdir("LEDGER", PERMS);
+                        chdir("LEDGER");
+                    }
                     /* LEDGER */
 
                 } else if (menu == PLANNER) {
-
+                    if (mkdir("PLANNER", PERMS) == -1) {
+                        chdir("PLANNER");
+                    } else {
+                        mkdir("PLANNER", PERMS);
+                        chdir("PLANNER");
+                    }
                     while (1) {
                         printList(year, month, date);
                         menu = choosePlannerMenu(year, month, date);
@@ -53,6 +63,7 @@ int main(void) {
                             gotoDate(&year, &month, &date);
                             break;
                         case PREVIOUS:
+                            chdir("..");
                             goto END;
                             break;
                         case KEYWORD:
