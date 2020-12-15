@@ -1,5 +1,4 @@
 #include "planner.hpp"
-#include "display.hpp"
 
 #include <cstring>
 #include <fcntl.h>

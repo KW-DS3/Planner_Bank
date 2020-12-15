@@ -1,6 +1,7 @@
-#ifndef __DISPLAY_H__
-#define __DISPLAY_H__
+#ifndef __DISPLAY_HPP__
+#define __DISPLAY_HPP__
 
+#include "kbhit.hpp"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,9 +36,10 @@ int numberOfDays(int monthNumber, int year);
 
 void printCalendar(int year, int month, int date);
 
+void loginDisplay();
 int chooseLogin();
-void CURSOR_LOGIN();
 void CURSOR_SIGNIN();
+void CURSOR_SIGNUP();
 
 int chooseMenu();
 void firstMenu();

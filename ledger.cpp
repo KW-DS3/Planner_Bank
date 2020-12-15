@@ -1,5 +1,4 @@
 #include "ledger.hpp"
-#include "display.hpp"
 #include <string.h>
 #include <vector>
 

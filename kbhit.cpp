@@ -1,9 +1,4 @@
-#ifndef __LINUX_KBHIT_H__
-#define __LINUX_KBHIT_H__
-
-#include <stdio.h>
-#include <termios.h>
-#include <unistd.h>
+#include "kbhit.hpp"
 
 int kbhit(void) {
     struct termios oldt, newt;
@@ -21,5 +16,3 @@ int kbhit(void) {
 
     return ch;
 }
-
-#endif
