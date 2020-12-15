@@ -319,9 +319,11 @@ int choosePlannerMenu(int year, int month, int date) {
     int menu = 0, value, index = 0;
     int updown = 0;
     int num = numOfEvents(year, month, date);
+
     plannerMenuCreate();
     do {
         value = kbhit();
+
         if (value == ENTER && updown == 1) {
             markEvent(year, month, date, index);
             printList(year, month, date);
@@ -394,9 +396,11 @@ int chooseEvent(int year, int month, int date) {
     int value;
     int index = 1;
     int num = numOfEvents(year, month, date);
+
     do {
         gotoxy(93, 14 + 2 * index);
         printWithBg(WHTE, BLCK, ">");
+
         value = kbhit();
 
         switch (value) {

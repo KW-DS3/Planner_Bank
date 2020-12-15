@@ -79,6 +79,7 @@ void Todo::inputEvent() {
 
 void Todo::createEvent() {
     inputEvent();
+
     int fd;
     string dirname =
         convert(getYear()) + convert(getMonth()) + convert(getDate());
@@ -88,6 +89,7 @@ void Todo::createEvent() {
     char buf[MAX_BUF_SIZE + 1] = {
         '\0',
     };
+
     if (!checkFileExists(dirname)) {
         if (mkdir(dirname.c_str(), PERMS) < 0) {
             perror("mkdir() error!");
@@ -105,6 +107,7 @@ void Todo::createEvent() {
     }
     close(fd);
 }
+
 bool is_stringEmpty(char *buf) {
     for (int i = 0; i < MAX_BUF_SIZE; i++) {
         if (buf[i] == '\0')
@@ -206,7 +209,7 @@ void printList(int year, int month, int date) {
             break;
         y += 2;
         gotoxy(95, y);
-        printWithBg(WHTE, BLCK, "?  ");
+        printWithBg(WHTE, BLCK, "☐  ");
         printWithBg(WHTE, BLCK, buf);
 
     } while (rSize > 0);
@@ -230,9 +233,11 @@ void printList(int year, int month, int date) {
         }
         if (rSize < 1)
             break;
-        gotoxy(95, y);
+
         y += 2;
-        printWithBg(WHTE, BLCK, "?  ");
+        gotoxy(95, y);
+
+        printWithBg(WHTE, BLCK, "✓  ");
         printWithBg(WHTE, BLCK, buf);
 
     } while (rSize > 0);
@@ -253,18 +258,20 @@ void gotoDate(int *year, int *month, int *date) {
 }
 
 void markEvent(int year, int month, int date, int index) {
+    int originalIn = numOfIncompletEvents(year, month, date);
+    int fd;
+
     string eventToMark = deleteEvent(year, month, date, index);
     string dirname = convert(year) + convert(month) + convert(date);
     string pathname;
-    int fd;
 
     char *buf = (char *)malloc(MAX_BUF_SIZE);
 
-    if (numOfIncompletEvents(year, month, date) >= index)
+    if (originalIn >= index)
         pathname = dirname + '/' + COMPLETE;
     else {
         pathname = dirname + '/' + INCOMPLETE;
-        index -= numOfIncompletEvents(year, month, date);
+        index = index - originalIn;
     }
 
     if ((fd = open(pathname.c_str(), O_RDWR | O_CREAT | O_APPEND, PERMS)) < 0) {
