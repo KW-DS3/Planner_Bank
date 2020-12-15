@@ -85,10 +85,6 @@ void Todo::createEvent() {
 
     string pathname = dirname + "/" + INCOMPLETE;
 
-    char buf[MAX_BUF_SIZE + 1] = {
-        '\0',
-    };
-
     if (!checkFileExists(dirname)) {
         if (mkdir(dirname.c_str(), PERMS) < 0) {
             perror("mkdir() error!");
@@ -100,7 +96,12 @@ void Todo::createEvent() {
         exit(-1);
     }
 
-    if ((write(fd, getTitle().c_str(), MAX_BUF_SIZE)) < 0) {
+    lseek(fd, SEEK_CUR, -1);
+    if (write(fd, (char *)getTitle().c_str(), (int)getTitle().length()) < 0) {
+        perror("write() error!");
+        exit(-2);
+    }
+    if (write(fd, "\n", 1) < 0) {
         perror("write() error!");
         exit(-2);
     }
@@ -130,7 +131,8 @@ string deleteEvent(int year, int month, int date, int index) {
     string pathname1 = dirname + '/' + "temp.txt";
     ssize_t rSize = 0;
     string eventToDelete = "";
-    char *buf = (char *)malloc(MAX_BUF_SIZE);
+    string todo = "";
+    char buf[2];
 
     if (numOfIncomplete >= index)
         pathname = dirname + '/' + INCOMPLETE;
@@ -146,22 +148,31 @@ string deleteEvent(int year, int month, int date, int index) {
         exit(-1);
     }
     do {
-        memset(buf, '\0', MAX_BUF_SIZE);
-        if ((rSize = read(fd, buf, MAX_BUF_SIZE)) < 0) {
+        memset(buf, '\0', 2);
+        if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
 
         if (rSize < 1)
             break;
-        if (num++ == index) {
-            eventToDelete = buf;
-            continue;
-        }
-
-        if ((write(fd1, buf, MAX_BUF_SIZE)) < 0) {
-            perror("write() error!");
-            exit(-2);
+        if (strcmp(buf, "\n") == 0) {
+            if (num++ == index) {
+                eventToDelete = todo;
+                todo = "";
+                continue;
+            }
+            if ((write(fd1, todo.c_str(), todo.length())) < 0) {
+                perror("write() error!");
+                exit(-2);
+            }
+            if (write(fd1, "\n", 1) < 0) {
+                perror("write() error!");
+                exit(-2);
+            }
+            todo = "";
+        } else {
+            todo += buf;
         }
 
     } while (rSize > 0);
@@ -174,6 +185,7 @@ string deleteEvent(int year, int month, int date, int index) {
 
     return eventToDelete;
 }
+
 void printList(int year, int month, int date) {
     int fd, y = 14;
     string dirname = convert(year) + convert(month) + convert(date);
@@ -191,25 +203,32 @@ void printList(int year, int month, int date) {
         printWithBg(WHTE, BLCK, "nothing to do");
         return;
     }
-    char *buf = (char *)malloc(MAX_BUF_SIZE);
+    char buf[2];
 
     if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
         perror("open() error!");
         exit(-1);
     }
 
+    string todo = "";
     do {
-        memset(buf, '\0', MAX_BUF_SIZE);
-        if ((rSize = read(fd, buf, MAX_BUF_SIZE)) < 0) {
+        memset(buf, '\0', 2);
+        if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
         if (rSize < 1)
             break;
-        y += 2;
-        gotoxy(95, y);
-        printWithBg(WHTE, BLCK, "☐  ");
-        printWithBg(WHTE, BLCK, buf);
+        if (strcmp(buf, "\n") != 0) {
+            todo += buf;
+
+        } else {
+            y += 2;
+            gotoxy(95, y);
+            printWithBg(WHTE, BLCK, "?");
+            printWithBg(WHTE, BLCK, todo);
+            todo = "";
+        }
 
     } while (rSize > 0);
 
@@ -225,19 +244,24 @@ void printList(int year, int month, int date) {
     }
 
     do {
-        memset(buf, '\0', MAX_BUF_SIZE);
-        if ((rSize = read(fd, buf, MAX_BUF_SIZE)) < 0) {
+        memset(buf, '\0', 2);
+        if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
         if (rSize < 1)
             break;
 
-        y += 2;
-        gotoxy(95, y);
+        if (strcmp(buf, "\n") != 0) {
+            todo += buf;
 
-        printWithBg(WHTE, BLCK, "✓  ");
-        printWithBg(WHTE, BLCK, buf);
+        } else {
+            y += 2;
+            gotoxy(95, y);
+            printWithBg(WHTE, BLCK, "?");
+            printWithBg(WHTE, BLCK, todo);
+            todo = "";
+        }
 
     } while (rSize > 0);
 
@@ -356,7 +380,7 @@ void plannerMenuKeyword() {
 int numOfEvents(int year, int month, int date) {
     string dirname = convert(year) + convert(month) + convert(date);
     string pathname = dirname + "/" + INCOMPLETE;
-    char *buf = (char *)malloc(MAX_BUF_SIZE);
+    char buf[2];
     int fd;
     ssize_t rSize = 0;
     int num = 0;
@@ -370,14 +394,15 @@ int numOfEvents(int year, int month, int date) {
     }
 
     do {
-        memset(buf, '\0', MAX_BUF_SIZE);
-        if ((rSize = read(fd, buf, MAX_BUF_SIZE)) < 0) {
+        memset(buf, '\0', 2);
+        if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
         if (rSize < 1)
             break;
-        num++;
+        if (strcmp(buf, "\n") == 0)
+            num++;
     } while (rSize > 0);
 
     pathname = dirname + "/" + COMPLETE;
@@ -391,14 +416,15 @@ int numOfEvents(int year, int month, int date) {
     }
 
     do {
-        memset(buf, '\0', MAX_BUF_SIZE);
-        if ((rSize = read(fd, buf, MAX_BUF_SIZE)) < 0) {
+        memset(buf, '\0', 2);
+        if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
         if (rSize < 1)
             break;
-        num++;
+        if (strcmp(buf, "\n") == 0)
+            num++;
     } while (rSize > 0);
 
     return num;
@@ -406,7 +432,7 @@ int numOfEvents(int year, int month, int date) {
 int numOfIncompletEvents(int year, int month, int date) {
     string dirname = convert(year) + convert(month) + convert(date);
     string pathname = dirname + "/" + INCOMPLETE;
-    char *buf = (char *)malloc(MAX_BUF_SIZE);
+    char buf[2];
     int fd;
     ssize_t rSize = 0;
     int num = 0;
@@ -420,14 +446,15 @@ int numOfIncompletEvents(int year, int month, int date) {
     }
 
     do {
-        memset(buf, '\0', MAX_BUF_SIZE);
-        if ((rSize = read(fd, buf, MAX_BUF_SIZE)) < 0) {
+        memset(buf, '\0', 2);
+        if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
         if (rSize < 1)
             break;
-        num++;
+        if (strcmp(buf, "\n") == 0)
+            num++;
     } while (rSize > 0);
 
     return num;
