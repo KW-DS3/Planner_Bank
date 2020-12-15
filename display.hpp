@@ -35,6 +35,10 @@ int numberOfDays(int monthNumber, int year);
 
 void printCalendar(int year, int month, int date);
 
+int chooseLogin();
+void CURSOR_LOGIN();
+void CURSOR_SIGNIN();
+
 int chooseMenu();
 void firstMenu();
 void firstMenuLedger();
