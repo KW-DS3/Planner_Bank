@@ -71,44 +71,26 @@ string getMonthName(int monthNumber) {
 // return how many days there are in the month of year
 int numberOfDays(int monthNumber, int year) {
     switch (monthNumber) {
-    case 1:
+    case 0:
+    case 2:
+    case 4:
+    case 6:
+    case 7:
+    case 9:
+    case 11:
         return (31);
         break;
-    case 2:
+    case 1:
         if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0))
             return (29);
         else
             return (28);
         break;
     case 3:
-        return (31);
-        break;
-    case 4:
-        return (30);
-        break;
     case 5:
-        return (31);
-        break;
-    case 6:
-        return (30);
-        break;
-    case 7:
-        return (31);
-        break;
     case 8:
-        return (31);
-        break;
-    case 9:
-        return (30);
-        break;
     case 10:
-        return (31);
-        break;
-    case 11:
         return (30);
-        break;
-    case 12:
-        return (31);
         break;
     }
 }
