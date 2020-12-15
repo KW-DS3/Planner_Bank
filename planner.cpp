@@ -101,10 +101,12 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
-    if (write(fd, "\n", 1) < 0) {
+    if (write(fd, "-", 1) < 0) {
         perror("write() error!");
         exit(-2);
     }
+    //input keyword
+    
     close(fd);
 }
 
