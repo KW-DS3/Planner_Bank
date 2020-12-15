@@ -34,7 +34,6 @@ void signup() {
             while (kbhit() != ENTER)
                 ;
             chdir("..");
-            chdir("..");
             break;
         } else {
             gotoxy(47, 34);
