@@ -127,8 +127,6 @@ void printCalendar(int year, int month, int date) {
         if (j < 10) {
             if (date == j) {
                 printWithBg(WHTE, BLCK, "          ");
-                // cout << "\033[4;" << WHTE << ";" << BLCK + 10 << "m"
-                //      << to_string(j) << end;
                 printWithBg(BLUE, BLCK, to_string(j));
             } else
                 printWithBg(WHTE, BLCK, "          " + to_string(j));
@@ -215,7 +213,18 @@ void firstMenu() {
 
     reset;
 }
+void loginDisplay() {
+    resetDisplay(41, 27, 50, 9);
+    gotoxy(42, 27);
+    printWithBg(WHTE, BLCK, "┌────────────────────────────────────────┐");
+    gotoxy(42, 35);
+    printWithBg(WHTE, BLCK, "└────────────────────────────────────────┘");
 
+    gotoxy(47, 30);
+    printWithBg(WHTE, BLCK, "ID:");
+    gotoxy(47, 32);
+    printWithBg(WHTE, BLCK, "PW: ");
+}
 int chooseLogin() {
     const int LOGIN = 0;
     const int SIGNIN = 0;
@@ -248,9 +257,9 @@ void CURSOR_LOGIN(void) {
     gotoxy(45, 30);
     print(BG, BLCK, "                             ");
     gotoxy(49, 30);
-    printWithBg(BLUE, BLCK, ">  LOG IN");
+    printWithBg(BLUE, BLCK, ">  SIGN IN");
     gotoxy(71, 30);
-    printWithBg(WHTE, BLCK, " SIGN IN");
+    printWithBg(WHTE, BLCK, " SIGN UP");
 
     reset;
 }
@@ -259,9 +268,9 @@ void CURSOR_SIGNIN(void) {
     gotoxy(45, 30);
     print(BG, BLCK, "                             ");
     gotoxy(51, 30);
-    printWithBg(WHTE, BLCK, " LOG IN");
+    printWithBg(WHTE, BLCK, " SIGN IN");
     gotoxy(70, 30);
-    printWithBg(BLUE, BLCK, "> SIGN IN");
+    printWithBg(BLUE, BLCK, "> SIGN UP");
     reset;
 }
 
