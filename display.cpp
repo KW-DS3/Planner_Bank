@@ -1,5 +1,4 @@
 #include "display.hpp"
-#include "kbhit.h"
 #include "planner.hpp"
 
 #include <cstring>
@@ -214,7 +213,7 @@ void firstMenu() {
     reset;
 }
 void loginDisplay() {
-    resetDisplay(41, 27, 50, 9);
+    firstMenu();
     gotoxy(42, 27);
     printWithBg(WHTE, BLCK, "┌────────────────────────────────────────┐");
     gotoxy(42, 35);
@@ -226,25 +225,25 @@ void loginDisplay() {
     printWithBg(WHTE, BLCK, "PW: ");
 }
 int chooseLogin() {
-    const int LOGIN = 0;
     const int SIGNIN = 0;
+    const int SIGNUP = 1;
     int menu = 0;
     int value;
 
     firstMenu();
-    CURSOR_LOGIN();
+    CURSOR_SIGNIN();
     do {
         value = kbhit();
 
         switch (value) {
         case LEFT: {
-            CURSOR_LOGIN();
-            menu = LOGIN;
+            CURSOR_SIGNIN();
+            menu = SIGNIN;
             break;
         }
         case RIGHT: {
-            CURSOR_SIGNIN();
-            menu = LOGIN;
+            CURSOR_SIGNUP();
+            menu = SIGNUP;
             break;
         }
         }
@@ -253,7 +252,7 @@ int chooseLogin() {
     return menu;
 }
 
-void CURSOR_LOGIN(void) {
+void CURSOR_SIGNIN(void) {
     gotoxy(45, 30);
     print(BG, BLCK, "                             ");
     gotoxy(49, 30);
@@ -264,13 +263,14 @@ void CURSOR_LOGIN(void) {
     reset;
 }
 
-void CURSOR_SIGNIN(void) {
+void CURSOR_SIGNUP(void) {
     gotoxy(45, 30);
     print(BG, BLCK, "                             ");
     gotoxy(51, 30);
     printWithBg(WHTE, BLCK, " SIGN IN");
     gotoxy(70, 30);
     printWithBg(BLUE, BLCK, "> SIGN UP");
+
     reset;
 }
 

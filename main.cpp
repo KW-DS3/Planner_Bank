@@ -1,4 +1,5 @@
 #include "display.hpp"
+#include "login.hpp"
 #include "planner.hpp"
 
 #include <iostream>
@@ -9,9 +10,11 @@
 using namespace std;
 
 int main(void) {
-    int previous_keystroke = 0, menu, index = 0;
+    int previous_keystroke = 0, menu, log_sign, index = 0;
     const int LEDGER = 0;
     const int PLANNER = 1;
+    const int SIGNIN = 0;
+    const int SIGNUP = 1;
 
     // get current date
     time_t t = time(NULL);
@@ -23,36 +26,47 @@ int main(void) {
 
     int value;
     while (1) {
-        menu = chooseMenu();
-        printCalendar(year, month, date);
-        if (menu == LEDGER) {
+        log_sign = chooseLogin();
+        switch (log_sign) {
+        case SIGNIN:
+            signin();
+            break;
+        case SIGNUP:
+            signup();
+            break;
+        }
+        while (1) {
+            menu = chooseMenu();
+            printCalendar(year, month, date);
+            if (menu == LEDGER) {
 
-            /* LEDGER */
+                /* LEDGER */
 
-        } else if (menu == PLANNER) {
+            } else if (menu == PLANNER) {
 
-            while (1) {
-                printList(year, month, date);
-                menu = choosePlannerMenu(year, month, date);
-                switch (menu) {
-                case CREATE:
-                    todo.createEvent();
-                    break;
-                case DELETE:
-                    index = chooseEvent(year, month, date);
-                    deleteEvent(year, month, date, index);
-                    break;
-                case GOTODATE:
-                    gotoDate(&year, &month, &date);
-                    break;
-                case PREVIOUS:
-                    goto END;
-                    break;
-                case KEYWORD:
-                    break;
+                while (1) {
+                    printList(year, month, date);
+                    menu = choosePlannerMenu(year, month, date);
+                    switch (menu) {
+                    case CREATE:
+                        todo.createEvent();
+                        break;
+                    case DELETE:
+                        index = chooseEvent(year, month, date);
+                        deleteEvent(year, month, date, index);
+                        break;
+                    case GOTODATE:
+                        gotoDate(&year, &month, &date);
+                        break;
+                    case PREVIOUS:
+                        goto END;
+                        break;
+                    case KEYWORD:
+                        break;
+                    }
                 }
+            END:;
             }
-        END:;
         }
     }
 

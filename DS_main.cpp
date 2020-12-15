@@ -1,4 +1,4 @@
-#include "kbhit.h"
+#include "kbhit.hpp"
 #include <iostream>
 #include <stdio.h>
 

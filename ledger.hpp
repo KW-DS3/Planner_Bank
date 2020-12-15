@@ -1,6 +1,7 @@
-#ifndef __LEDGER_H__
-#define __LEDGER_H__
+#ifndef __LEDGER_HPP__
+#define __LEDGER_HPP__
 
+#include "display.hpp"
 #include <string>
 #include <vector>
 

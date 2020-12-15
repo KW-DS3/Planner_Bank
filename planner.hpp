@@ -1,9 +1,10 @@
-#ifndef __PLANNNER_H__
-#define __PLANNER_H__
+#ifndef __PLANNER_HPP__
+#define __PLANNER_HPP__
 
+#include "display.hpp"
+#include "keyword.hpp"
 #include <iostream>
 #include <string>
-#include "keyword.hpp"
 
 #define PERMS 0777
 #define MAX_BUF_SIZE 256
