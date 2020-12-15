@@ -325,7 +325,6 @@ int choosePlannerMenu(int year, int month, int date) {
     do {
         value = kbhit();
 
-        resetDisplay(93, 14, 1, 27);
         if (value == ENTER && updown == 1) {
             markEvent(year, month, date, index);
             printList(year, month, date);
@@ -333,6 +332,8 @@ int choosePlannerMenu(int year, int month, int date) {
 
         switch (value) {
         case LEFT: {
+            resetDisplay(93, 14, 1, 15);
+
             updown = 0;
             if (menu == 0)
                 menu = 4;
@@ -341,6 +342,8 @@ int choosePlannerMenu(int year, int month, int date) {
             break;
         }
         case RIGHT: {
+            resetDisplay(93, 14, 1, 15);
+
             updown = 0;
             if (menu == 4)
                 menu = 0;
@@ -349,6 +352,7 @@ int choosePlannerMenu(int year, int month, int date) {
             break;
         }
         case UP: {
+            updown = 1;
             if (index == 1)
                 index = num;
             else
@@ -358,7 +362,6 @@ int choosePlannerMenu(int year, int month, int date) {
         }
         case DOWN: {
             updown = 1;
-
             if (index == num)
                 index = 1;
             else
