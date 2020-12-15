@@ -209,7 +209,7 @@ void printList(int year, int month, int date) {
             break;
         y += 2;
         gotoxy(95, y);
-        printWithBg(WHTE, BLCK, "y  ");
+        printWithBg(WHTE, BLCK, "☐  ");
         printWithBg(WHTE, BLCK, buf);
 
     } while (rSize > 0);
@@ -237,7 +237,7 @@ void printList(int year, int month, int date) {
         y += 2;
         gotoxy(95, y);
 
-        printWithBg(WHTE, BLCK, "n  ");
+        printWithBg(WHTE, BLCK, "✓  ");
         printWithBg(WHTE, BLCK, buf);
 
     } while (rSize > 0);
