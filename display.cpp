@@ -36,7 +36,7 @@ void resetDisplay() {
     gotoxy(0, 0);
     system("clear");
 
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 45; i++) {
         for (int j = 0; j < 130; j++) {
             print(BG, BLCK, " ");
         }

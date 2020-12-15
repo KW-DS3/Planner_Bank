@@ -48,7 +48,7 @@ void Confirm::message() {
     else if((save() < 30000)&&(-check ==cnum)) str = "절약된 부문이 없습니다. 특히 "+overCate+"에 "+to_string(mostOver)+"원 과소비 했습니다. 정신차려야겠네요...";
     else if(save() == 0) str = "저번 달과 총금액 차이가 없네요! 신기합니다!";
 
-    printWithBg(whte,blck, str);
+    printWithBg(WHTE,BLCK, str);
     mlen = str.length();
 }
 
@@ -58,30 +58,30 @@ void Confirm::setScreen() {
     resetDisplay();
     setCnum(3);
     setCateList("food", 10000, 40000); setCateList("face", 50000, 30000); setCateList("study", 50000, 20000);     //IMSEE
-    gotoxy(59, 3); printWithBg(whte, blck,"[ MY STATUS ]");
-    gotoxy(32, 5); printWithBg(whte, blck, "[ Last Month ]                              [ This Month ]");
-    gotoxy(10, 6); printWithBg(whte, blck, "╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+    gotoxy(59, 3); printWithBg(WHTE, BLCK,"[ MY STATUS ]");
+    gotoxy(32, 5); printWithBg(WHTE, BLCK, "[ Last Month ]                              [ This Month ]");
+    gotoxy(10, 6); printWithBg(WHTE, BLCK, "╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
     for(int i = 0; i <25; i++) {
-        gotoxy(10, 7+i); printWithBg(whte, blck, "║");
-        gotoxy(60, 7+i); printWithBg(whte, blck, "║");
-        gotoxy(120, 7+i); printWithBg(whte, blck, "║");
-        gotoxy(20, 7+i); printWithBg(whte, blck, "|");
-        gotoxy(105, 7+i); printWithBg(whte,blck, "|");
+        gotoxy(10, 7+i); printWithBg(WHTE, BLCK, "║");
+        gotoxy(60, 7+i); printWithBg(WHTE, BLCK, "║");
+        gotoxy(120, 7+i); printWithBg(WHTE, BLCK, "║");
+        gotoxy(20, 7+i); printWithBg(WHTE, BLCK, "|");
+        gotoxy(105, 7+i); printWithBg(WHTE,BLCK, "|");
     }
-    gotoxy(10, 31); printWithBg(whte, blck, "╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
-    gotoxy(12,8); printWithBg(whte, blck, "EARNING");
+    gotoxy(10, 31); printWithBg(WHTE, BLCK, "╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
+    gotoxy(12,8); printWithBg(WHTE, BLCK, "EARNING");
     for(int i = 0; i < cnum; i++) {
-        gotoxy(22, 8+i); printWithBg(whte, blck, CateList[i].category+" : "+to_string(CateList[i].last));
+        gotoxy(22, 8+i); printWithBg(WHTE, BLCK, CateList[i].category+" : "+to_string(CateList[i].last));
     }
-    gotoxy(12, 18); printWithBg(whte, blck, "SPENDING");
+    gotoxy(12, 18); printWithBg(WHTE, BLCK, "SPENDING");
     for(int i = 0; i < cnum; i++) {
-        gotoxy(62, 8+i); printWithBg(whte, blck, CateList[i].category+" : "+to_string(CateList[i].pre));
+        gotoxy(62, 8+i); printWithBg(WHTE, BLCK, CateList[i].category+" : "+to_string(CateList[i].pre));
     }
-    gotoxy(10, 33); printWithBg(whte, blck, "[ ONE-LINE EVALUATION ]");
+    gotoxy(10, 33); printWithBg(WHTE, BLCK, "[ ONE-LINE EVALUATION ]");
     gotoxy(12, 35); message();
-    gotoxy(11, 35); printWithBg(whte, blck, "╭");for(int i = 0; i < mlen; i++) {gotoxy(12+i,35); printWithBg(whte,blck,"─");x=13+i;}gotoxy(x,35);printWithBg(whte,blck,"╮");
-    gotoxy(13, 35); printWithBg(whte, blck, "^");gotoxy(11,36); printWithBg(whte,blck,"│"); gotoxy(x,36); printWithBg(whte,blck,"│");
-    gotoxy(11, 37); printWithBg(whte, blck, "╰");for(int i = 0; i < mlen; i++) {gotoxy(12+i,37); printWithBg(whte,blck,"─");x=13+i;}gotoxy(x,37);printWithBg(whte,blck,"╯");
+    gotoxy(11, 35); printWithBg(WHTE, BLCK, "╭");for(int i = 0; i < mlen; i++) {gotoxy(12+i,35); printWithBg(WHTE,BLCK,"─");x=13+i;}gotoxy(x,35);printWithBg(WHTE,BLCK,"╮");
+    gotoxy(13, 35); printWithBg(WHTE, BLCK, "^");gotoxy(11,36); printWithBg(WHTE,BLCK,"│"); gotoxy(x,36); printWithBg(WHTE,BLCK,"│");
+    gotoxy(11, 37); printWithBg(WHTE, BLCK, "╰");for(int i = 0; i < mlen; i++) {gotoxy(12+i,37); printWithBg(WHTE,BLCK,"─");x=13+i;}gotoxy(x,37);printWithBg(WHTE,BLCK,"╯");
     gotoxy(13, 36); message();
     gotoxy(130,40);
 }
