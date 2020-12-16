@@ -27,7 +27,7 @@ int Todo::getDate() { return when.date; }
 int Todo::getMonth() { return when.month; }
 int Todo::getYear() { return when.year; }
 string Todo::getTitle() { return title; }
-string Todo::getKeyword() { return keyword;}
+string Todo::getKeyword() { return keyword; }
 
 void Todo::setDate(int year, int month, int date) {
     when.year = year;
@@ -98,15 +98,16 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
-    if (write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length()) < 0) {
+    if (write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length()) <
+        0) {
         perror("write() error!");
         exit(-2);
     }
-    if(write(fd, "\n", 1)<0) {
+    if (write(fd, "\n", 1) < 0) {
         perror("write() error!");
         exit(-2);
     }
-    
+
     close(fd);
 }
 
@@ -195,7 +196,7 @@ void printList(int year, int month, int date) {
     ssize_t rSize = 0;
     struct stat statBuf;
     vector<string> keys(6);
-    int i=0;
+    int index = 0;
 
     resetDisplay(93, 7, 35, 27);
 
@@ -209,64 +210,75 @@ void printList(int year, int month, int date) {
     }
     char buf[2];
 
-    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {   //file open
+    if ((fd = open(pathname.c_str(), O_RDONLY)) < 0) { // file open
         perror("open() error!");
         exit(-1);
     }
     string todo;
-    
+
     do {
-        memset(buf, '\0', 2);                       //initialize buf '\0'
+        memset(buf, '\0', 2); // initialize buf '\0'
         if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
-        if (rSize < 1)
-            break;
 
-        if(strcmp(buf, "#")==0) {
-            i++;
+        if (strcmp(buf, "#") == 0) {
+            index++;
         } else if (strcmp(buf, "\n") != 0) {
-            keys[i] += buf;
+            keys[index] += buf;
         } else {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "! ");
-            printWithBg(WHTE, BLCK, keys[i]);
-            keys[0] = "";
+
+            for (int i = 0; i < index + 1; i++) {
+                if (i == 0)
+                    printWithBg(WHTE, BLCK, keys[i]);
+                else
+                    printWithBg(WHTE, BLCK, "#" + keys[i]);
+                keys[i] = "";
+            }
+            index = 0;
         }
     } while (rSize > 0);
     setkw(keys, dirname);
     close(fd);
 
     pathname = dirname + '/' + COMPLETE;
+
     if (!checkFileExists(pathname))
         return;
 
-    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
+    if ((fd = open(pathname.c_str(), O_RDONLY)) < 0) {
         perror("open() error!");
         exit(-1);
     }
 
+    index = 0;
     do {
         memset(buf, '\0', 2);
         if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
-        
-        if (rSize < 1)
-            break;
 
-        if (strcmp(buf, "\n") != 0) {
-            todo += buf;
-
+        if (strcmp(buf, "#") == 0) {
+            index++;
+        } else if (strcmp(buf, "\n") != 0) {
+            keys[index] += buf;
         } else {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "V ");
-            printWithBg(WHTE, BLCK, todo);
-            todo = "";
+            for (int i = 0; i < index + 1; i++) {
+                if (i == 0)
+                    printWithBg(WHTE, BLCK, keys[i]);
+                else
+                    printWithBg(WHTE, BLCK, "#" + keys[i]);
+                keys[i] = "";
+            }
+            index = 0;
         }
 
     } while (rSize > 0);
@@ -294,8 +306,6 @@ void markEvent(int year, int month, int date, int index) {
     string dirname = convert(year) + convert(month) + convert(date);
     string pathname;
 
-    char *buf = (char *)malloc(MAX_BUF_SIZE);
-
     if (originalIn >= index)
         pathname = dirname + '/' + COMPLETE;
     else {
@@ -308,10 +318,11 @@ void markEvent(int year, int month, int date, int index) {
         exit(-1);
     }
 
-    if ((write(fd, eventToMark.c_str(), MAX_BUF_SIZE)) < 0) {
+    if ((write(fd, eventToMark.c_str(), eventToMark.length())) < 0) {
         perror("write() error!");
         exit(-2);
     }
+    write(fd, "\n", 1);
     close(fd);
     resetDisplay(93, 14, 1, 15);
 }
