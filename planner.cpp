@@ -74,7 +74,7 @@ void Todo::inputEvent() {
     cin.ignore();
 }
 
-void Todo::createEvent() {
+void Todo::createEvent(Keyword &keyword) {
     inputEvent();
 
     int fd;
@@ -82,6 +82,7 @@ void Todo::createEvent() {
         convert(getYear()) + convert(getMonth()) + convert(getDate());
 
     string pathname = dirname + "/" + INCOMPLETE;
+    vector<string> key = {getTitle(), getKeyword()};
 
     if (!checkFileExists(dirname)) {
         if (mkdir(dirname.c_str(), PERMS) < 0) {
@@ -99,10 +100,14 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
-    if (write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length()) <
-        0) {
-        perror("write() error!");
-        exit(-2);
+
+    if (getKeyword() != "-") {
+        if (write(fd, (char *)getKeyword().c_str(),
+                  (int)getKeyword().length()) < 0) {
+            perror("write() error!");
+            exit(-2);
+        }
+        keyword.setkw(key, dirname);
     }
     if (write(fd, "\n", 1) < 0) {
         perror("write() error!");
@@ -243,7 +248,6 @@ void printList(int year, int month, int date) {
             index = 0;
         }
     } while (rSize > 0);
-    setkw(keys, dirname);
     close(fd);
 
     pathname = dirname + '/' + COMPLETE;

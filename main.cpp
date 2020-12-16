@@ -23,13 +23,14 @@ int main(void) {
     int month = tm.tm_mon + 1;
     int year = tm.tm_year + 1900;
     Todo todo;
-    Keyword Keyword;
-
+    Keyword keyword;
     int value;
+
     while (1) {
         log_sign = chooseLogin();
         if (log_sign == SIGNIN) {
             signin();
+
             while (1) {
                 menu = chooseMenu();
                 printCalendar(year, month, date);
@@ -49,12 +50,13 @@ int main(void) {
                         mkdir("PLANNER", PERMS);
                         chdir("PLANNER");
                     }
+                    keyword.init();
                     while (1) {
                         printList(year, month, date);
                         menu = choosePlannerMenu(year, month, date);
                         switch (menu) {
                         case CREATE:
-                            todo.createEvent();
+                            todo.createEvent(keyword);
                             break;
                         case DELETE:
                             index = chooseEvent(year, month, date);
