@@ -15,7 +15,7 @@ int date::getYear() { return this->year; }
 
 int date::getMonth() { return this->month; }
 
-int date::getDay() { return this->month; }
+int date::getDay() { return this->day; }
 
 BankRecord::BankRecord() {}
 
