@@ -29,6 +29,7 @@ int Todo::getDate() { return when.date; }
 int Todo::getMonth() { return when.month; }
 int Todo::getYear() { return when.year; }
 string Todo::getTitle() { return title; }
+string Todo::getKeyword() { return keyword; }
 
 void Todo::setDate(int year, int month, int date) {
     when.year = year;
@@ -36,6 +37,7 @@ void Todo::setDate(int year, int month, int date) {
     when.date = date;
 }
 void Todo::setTitle(string title) { this->title = title; }
+void Todo::setKeyword(string keyword) { this->keyword = keyword; }
 
 string convert(int date) {
     if (date < 10)
@@ -54,9 +56,6 @@ void Todo::inputEvent() {
         cin >> when.year >> when.month >> when.date;
         if (when.month < 0 || when.month > 12 || when.date < 0 ||
             when.date > numberOfDays(when.month, when.year)) {
-
-            // gotoxy(95, 8);
-            // printWithBg(WHTE, BLCK, "wrong input! try again");
             continue;
         } else
             break;
@@ -72,7 +71,7 @@ void Todo::inputEvent() {
 
     setDate(when.year, when.month, when.date);
     setTitle(title);
-    // setKeyword(title, keyword);
+    setKeyword(keyword);
     cin.ignore();
 }
 
@@ -101,11 +100,14 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
-    if (write(fd, "-", 1) < 0) {
+    if (write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length()) < 0) {
         perror("write() error!");
         exit(-2);
     }
-    //input keyword
+    if(write(fd, "\n", 1)<0) {
+        perror("write() error!");
+        exit(-2);
+    }
     
     close(fd);
 }
@@ -227,7 +229,7 @@ void printList(int year, int month, int date) {
         } else {
             y += 2;
             gotoxy(95, y);
-            printWithBg(WHTE, BLCK, "?");
+            printWithBg(WHTE, BLCK, "! ");
             printWithBg(WHTE, BLCK, todo);
             todo = "";
         }
@@ -260,7 +262,7 @@ void printList(int year, int month, int date) {
         } else {
             y += 2;
             gotoxy(95, y);
-            printWithBg(WHTE, BLCK, "?");
+            printWithBg(WHTE, BLCK, "V ");
             printWithBg(WHTE, BLCK, todo);
             todo = "";
         }
