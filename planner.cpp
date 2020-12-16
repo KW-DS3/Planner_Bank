@@ -194,6 +194,9 @@ void printList(int year, int month, int date) {
     string pathname = dirname + '/' + INCOMPLETE;
     ssize_t rSize = 0;
     struct stat statBuf;
+    vector<string> keys(6);
+    int i=0;
+
     resetDisplay(93, 7, 35, 27);
 
     gotoxy(102, y);
@@ -221,17 +224,19 @@ void printList(int year, int month, int date) {
         if (rSize < 1)
             break;
 
-        if (strcmp(buf, "\n") != 0) {
-            todo += buf;
+        if(strcmp(buf, "#")==0) {
+            i++;
+        } else if (strcmp(buf, "\n") != 0) {
+            keys[i] += buf;
         } else {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "! ");
-            printWithBg(WHTE, BLCK, todo);
-            todo = "";
+            printWithBg(WHTE, BLCK, keys.front());
+            keys[0] = "";
         }
     } while (rSize > 0);
-
+    setkw(keys, dirname);
     close(fd);
 
     pathname = dirname + '/' + COMPLETE;

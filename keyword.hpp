@@ -8,13 +8,12 @@
 
 using namespace std;
 
-map<string, vector<vector<string>>> kwMap;
-map<string, vector<string>>::iterator iter;
-
-
 void setkw(vector<string> keyword, string dirname);
 void findkw(string keyword);
 void printkw(string title);
+
+void setMap(map<string, vector<vector<string>>> kwMap);
+void getMap();
 
 
 #endif //__KEYWORD_HPP__

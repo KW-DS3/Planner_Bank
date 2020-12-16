@@ -2,6 +2,7 @@
 #define __PLANNER_HPP__
 
 #include "display.hpp"
+#include "keyword.hpp"
 #include <iostream>
 #include <string>
 
@@ -57,7 +58,7 @@ std::string deleteEvent(int year, int month, int date, int index);
 void printList(int year, int month, int date);
 void gotoDate(int *year, int *month, int *date);
 
-void inputEvent(Todo todo);
+//void inputEvent(Todo todo);
 void markEvent(int year, int month, int date, int index);
 void plannerMenuCreate();
 void plannerMenuGotoDate();

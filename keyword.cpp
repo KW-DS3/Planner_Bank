@@ -1,6 +1,9 @@
 #include "keyword.hpp"
 
+
 void setkw(vector<string> keyword, string dirname){
+    map<string, vector<vector<string>>> kwMap;
+
     vector<vector<string>>vec0;
     vector<string>vec1;     //date(dirname)
     vector<string>vec2;     //todo
@@ -14,10 +17,10 @@ void setkw(vector<string> keyword, string dirname){
         kwMap.insert(make_pair(keyword[i], vec0));
 }
 
-void findkw(string keyword){
-    if(kwMap.find(keyword)==kwMap.end()) {
-        cout<<"no exist"<<endl;
-    } else {
-        //
-    }
-}
+// void findkw(string keyword){
+//     if(kwMap.find(keyword)==kwMap.end()) {
+//         cout<<"no exist"<<endl;
+//     } else {
+//         //
+//     }
+// }
