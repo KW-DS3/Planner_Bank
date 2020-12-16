@@ -191,6 +191,7 @@ string deleteEvent(int year, int month, int date, int index) {
 }
 
 void printList(int year, int month, int date) {
+    Keyword KW;
     int fd, y = 14;
     string dirname = convert(year) + convert(month) + convert(date);
     string pathname = dirname + '/' + INCOMPLETE;
@@ -223,8 +224,10 @@ void printList(int year, int month, int date) {
             perror("read() error!");
             exit(-3);
         }
-
-        if (strcmp(buf, "#") == 0) {
+        if (strcmp(buf, "-")==0) {
+            continue;
+        }
+        else if (strcmp(buf, "#") == 0) {
             index++;
         } else if (strcmp(buf, "\n") != 0) {
             keys[index] += buf;
@@ -232,18 +235,18 @@ void printList(int year, int month, int date) {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "! ");
+            //KW.setkw(keys, dirname);
 
             for (int i = 0; i < index + 1; i++) {
                 if (i == 0)
                     printWithBg(WHTE, BLCK, keys[i]);
                 else
-                    printWithBg(WHTE, BLCK, "#" + keys[i]);
+                    continue;
                 keys[i] = "";
             }
             index = 0;
         }
     } while (rSize > 0);
-    setkw(keys, dirname);
     close(fd);
 
     pathname = dirname + '/' + COMPLETE;
@@ -264,7 +267,10 @@ void printList(int year, int month, int date) {
             exit(-3);
         }
 
-        if (strcmp(buf, "#") == 0) {
+        if(strcmp(buf, "-")==0){
+            continue;
+        }
+        else if (strcmp(buf, "#") == 0) {
             index++;
         } else if (strcmp(buf, "\n") != 0) {
             keys[index] += buf;
@@ -272,11 +278,13 @@ void printList(int year, int month, int date) {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "V ");
+            KW.setkw(keys, dirname);
+
             for (int i = 0; i < index + 1; i++) {
                 if (i == 0)
                     printWithBg(WHTE, BLCK, keys[i]);
                 else
-                    printWithBg(WHTE, BLCK, "#" + keys[i]);
+                    continue;
                 keys[i] = "";
             }
             index = 0;
@@ -288,7 +296,7 @@ void printList(int year, int month, int date) {
 }
 
 void gotoDate(int *year, int *month, int *date) {
-    resetDisplay(97, 7, 28, 3);
+    resetDisplay(97, 7, 28, 5);
     int temp = *date;
 
     gotoxy(97, 7);
