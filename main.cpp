@@ -23,6 +23,7 @@ int main(void) {
     int month = tm.tm_mon + 1;
     int year = tm.tm_year + 1900;
     Todo todo;
+    Keyword Keyword;
 
     int value;
     while (1) {

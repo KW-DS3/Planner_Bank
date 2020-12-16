@@ -1,4 +1,5 @@
 #include "planner.hpp"
+#include "keyword.hpp"
 
 #include <cstring>
 #include <fcntl.h>
