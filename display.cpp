@@ -94,7 +94,6 @@ int numberOfDays(int monthNumber, int year) {
     }
 }
 
-// add print calender and print *
 // print calendar for that month
 void printCalendar(int year, int month, int date) {
     resetDisplay();
