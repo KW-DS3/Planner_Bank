@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define PERMS 0644
+#define PERMS 0755
 #define MAX_NAME_SIZE 32
 
 using namespace std;
@@ -73,6 +73,10 @@ void addBank(date date) {
 
     lseek(fd, SEEK_CUR, -1);
     if (write(fd, (char *)msgMoney, strlen(msgMoney)) < 0) {
+        perror("write() error!");
+        exit(-2);
+    }
+    if (write(fd, " ", 1) < 0) {
         perror("write() error!");
         exit(-2);
     }
