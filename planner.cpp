@@ -2,11 +2,9 @@
 
 #include <cstring>
 #include <fcntl.h>
-#include <iostream>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -101,19 +99,14 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
-<<<<<<< HEAD
     if(write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length())<0) {
         perror("write() error!");
         exit(-2);
     }
     if (write(fd, "\n", 1) < 0) {
-=======
-    if (write(fd, "-", 1) < 0) {
->>>>>>> f7abf6c27ae63daada56aa0eb1505d7bdf156805
         perror("write() error!");
         exit(-2);
     }
-    //input keyword
     
     close(fd);
 }
@@ -203,6 +196,7 @@ void printList(int year, int month, int date) {
     ssize_t rSize = 0;
     struct stat statBuf;
 
+    gotoxy(1, 45);cout<<"hey";
     resetDisplay(93, 7, 35, 27);
 
     gotoxy(102, y);
@@ -219,9 +213,9 @@ void printList(int year, int month, int date) {
         perror("open() error!");
         exit(-1);
     }
-
-    string todo = "";
-    string keyword="";
+    vector<string> keys;
+    int i = 0;
+    
     do {
         memset(buf, '\0', 2);                       //initialize buf '\0'
         if ((rSize = read(fd, buf, 1)) < 0) {
@@ -230,15 +224,15 @@ void printList(int year, int month, int date) {
         }
         if (rSize < 1)
             break;
-        if (strcmp(buf, "\n") != 0) {
-            //setkw(keyword, dirname, todo);
-            todo += buf;
+        if(strcmp(buf, "#")==0)
+            i++;
+        else if (strcmp(buf, "\n") != 0) {
+            keys[i] += buf;
         } else {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "! ");
-            printWithBg(WHTE, BLCK, todo);
-            todo = "";
+            printWithBg(WHTE, BLCK, keys[0]);
         }
     } while (rSize > 0);
 
@@ -264,14 +258,13 @@ void printList(int year, int month, int date) {
             break;
 
         if (strcmp(buf, "\n") != 0) {
-            todo += buf;
+            keys[i] += buf;
 
         } else {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "V ");
-            printWithBg(WHTE, BLCK, todo);
-            todo = "";
+            printWithBg(WHTE, BLCK, keys[0]);
         }
 
     } while (rSize > 0);
