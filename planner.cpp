@@ -232,7 +232,7 @@ void printList(int year, int month, int date) {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "! ");
-            printWithBg(WHTE, BLCK, keys.front());
+            printWithBg(WHTE, BLCK, keys[i]);
             keys[0] = "";
         }
     } while (rSize > 0);
