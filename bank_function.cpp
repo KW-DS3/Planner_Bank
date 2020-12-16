@@ -92,49 +92,31 @@ void addBank(date date) {
     close(fd);
 }
 
-void delBank(date date) {}
+void delBank(date date) {
+    int index = 0;
+    int fd, fd1, num = 1;
+    int select = checkBank(date);
+    cout << "Which one do you want to delete?(enter index number): ";
+    cin >> index;
 
-void checkBank(date date) {
-    int fd = 0;
     string dirname = convert(date.getYear()) + convert(date.getMonth()) +
                      convert(date.getDay());
-    string pathname = dirname + '/' + "IncomeList.txt";
-    char buf[2] = {
-        '\0',
-    };
+    string pathname;
+    string pathname1 = dirname + '/' + "temp.txt";
     ssize_t rSize = 0;
-    ssize_t tSize = 0;
+    string toDelete = "";
+    string todo = "";
+    char buf[2];
 
-    if (!checkFileExists(dirname)) {
-        cout << "No income and no expenses!" << endl;
+    if (select == 'i') {
+        pathname = dirname + '/' + "IncomeList.txt";
+    } else if (select == 'e') {
+        pathname = dirname + '/' + "ExpenseList.txt";
+    } else
         return;
-    }
 
-    cout << endl;
-
-    cout << "[Income List of " << dirname << "]" << endl;
-    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) { // file open
-        perror("open() error!");
-        exit(-1);
-    }
-
-    do {
-        memset(buf, '\0', 2); // initialize buf '\0'
-        if ((rSize = read(fd, buf, 1)) < 0) {
-            perror("read() error!");
-            exit(-3);
-        }
-        if (rSize < 1)
-            break;
-
-        cout << buf;
-
-    } while (rSize > 0);
-    cout << endl;
-    close(fd);
-    pathname = dirname + '/' + "ExpenseList.txt";
-    cout << "[Expense List of " << dirname << "]" << endl;
-    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
+    if ((fd = open(pathname.c_str(), O_RDWR | O_CREAT, PERMS)) < 0 ||
+        (fd1 = open(pathname1.c_str(), O_RDWR | O_CREAT, PERMS)) < 0) {
         perror("open() error!");
         exit(-1);
     }
@@ -148,12 +130,123 @@ void checkBank(date date) {
 
         if (rSize < 1)
             break;
-
-        cout << buf;
+        if (strcmp(buf, "\n") == 0) {
+            if (num++ == index) {
+                toDelete = todo;
+                todo = "";
+                continue;
+            }
+            if ((write(fd1, todo.c_str(), todo.length())) < 0) {
+                perror("write() error!");
+                exit(-2);
+            }
+            if (write(fd1, "\n", 1) < 0) {
+                perror("write() error!");
+                exit(-2);
+            }
+            todo = "";
+        } else {
+            todo += buf;
+        }
 
     } while (rSize > 0);
 
-    cout << endl;
-
     close(fd);
+    close(fd1);
+
+    remove(pathname.c_str());
+    rename(pathname1.c_str(), pathname.c_str());
+
+    cout << "Deleted successfully." << endl;
+}
+
+char checkBank(date date) {
+    int fd = 0;
+    int index = 1;
+    char buf[2] = {
+        '\0',
+    };
+    ssize_t rSize = 0;
+    ssize_t tSize = 0;
+    char select = 0;
+    cout << "Would you like to check your Income(i) or Expense(e)?: ";
+    cin >> select;
+
+    if (select == 'i') {
+        string dirname = convert(date.getYear()) + convert(date.getMonth()) +
+                         convert(date.getDay());
+        string pathname = dirname + '/' + "IncomeList.txt";
+
+        if (!checkFileExists(dirname)) {
+            cout << "No income and no expenses!" << endl;
+            return 'x';
+        }
+
+        cout << "[Income List of " << dirname << "]" << endl;
+        if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) { // file open
+            perror("open() error!");
+            exit(-1);
+        }
+        cout << "(" << index << ") ";
+        do {
+            memset(buf, '\0', 2); // initialize buf '\0'
+            if ((rSize = read(fd, buf, 1)) < 0) {
+                perror("read() error!");
+                exit(-3);
+            }
+            if (rSize < 1)
+                break;
+            if (strcmp(buf, "\n") == 0) {
+                index++;
+                cout << buf;
+                cout << "(" << index << ") ";
+
+            } else
+                cout << buf;
+
+        } while (rSize > 0);
+        close(fd);
+        return select;
+    }
+
+    else if (select == 'e') {
+
+        string dirname = convert(date.getYear()) + convert(date.getMonth()) +
+                         convert(date.getDay());
+        string pathname = dirname + '/' + "ExpenseList.txt";
+        cout << "[Expense List of " << dirname << "]" << endl;
+        if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
+            perror("open() error!");
+            exit(-1);
+        }
+
+        cout << "(" << index << ") ";
+        do {
+            memset(buf, '\0', 2);
+            if ((rSize = read(fd, buf, 1)) < 0) {
+                perror("read() error!");
+                exit(-3);
+            }
+
+            if (rSize < 1)
+                break;
+
+            if (strcmp(buf, "\n") == 0) {
+                index++;
+                cout << buf;
+                cout << "(" << index << ") ";
+
+            } else
+                cout << buf;
+
+        } while (rSize > 0);
+
+        close(fd);
+        return select;
+    }
+
+    else {
+        cout << "Wrong choice!" << endl;
+        return 'x';
+    }
 }

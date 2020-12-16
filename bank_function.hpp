@@ -5,6 +5,6 @@
 
 void addBank(date date);
 void delBank(date date);
-void checkBank(date date);
+char checkBank(date date);
 
 #endif
