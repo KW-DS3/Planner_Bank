@@ -5,37 +5,32 @@
 
 using namespace std;
 
-class date
-{
-public:
-	date();
-	date(int year, int month, int day);
-	int getYear();
-	int getMonth();
-	int getDay();
+class date {
+  public:
+    date();
+    date(int year, int month, int day);
+    int getYear();
+    int getMonth();
+    int getDay();
 
-private:
-	int year;
-	int month;
-	int day;
+  private:
+    int year;
+    int month;
+    int day;
 };
 
-class BankRecord
-{
-public:
-	BankRecord();
-	BankRecord(date date, int money, string category);
-	date getDate();
-	int getMoney();
-	string getCategory();
+class BankRecord {
+  public:
+    BankRecord();
+    BankRecord(date date, int money, string category);
+    date getDate();
+    int getMoney();
+    string getCategory();
 
-private:
-	date when; 
-	int money; 
-	string category; 
+  private:
+    date when;
+    int money;
+    string category;
 };
-
-
-
 
 #endif
