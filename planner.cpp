@@ -101,14 +101,20 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
+<<<<<<< HEAD
     if(write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length())<0) {
         perror("write() error!");
         exit(-2);
     }
     if (write(fd, "\n", 1) < 0) {
+=======
+    if (write(fd, "-", 1) < 0) {
+>>>>>>> f7abf6c27ae63daada56aa0eb1505d7bdf156805
         perror("write() error!");
         exit(-2);
     }
+    //input keyword
+    
     close(fd);
 }
 
