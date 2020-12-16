@@ -29,6 +29,7 @@ int Todo::getDate() { return when.date; }
 int Todo::getMonth() { return when.month; }
 int Todo::getYear() { return when.year; }
 string Todo::getTitle() { return title; }
+string Todo::getKeyword() { return keyword;}
 
 void Todo::setDate(int year, int month, int date) {
     when.year = year;
@@ -36,6 +37,7 @@ void Todo::setDate(int year, int month, int date) {
     when.date = date;
 }
 void Todo::setTitle(string title) { this->title = title; }
+void Todo::setKeyword(string keyword) { this->keyword=keyword;}
 
 string convert(int date) {
     if (date < 10)
@@ -54,9 +56,6 @@ void Todo::inputEvent() {
         cin >> when.year >> when.month >> when.date;
         if (when.month < 0 || when.month > 12 || when.date < 0 ||
             when.date > numberOfDays(when.month, when.year)) {
-
-            // gotoxy(95, 8);
-            // printWithBg(WHTE, BLCK, "wrong input! try again");
             continue;
         } else
             break;
@@ -72,7 +71,8 @@ void Todo::inputEvent() {
 
     setDate(when.year, when.month, when.date);
     setTitle(title);
-    // setKeyword(title, keyword);
+    setKeyword(keyword);
+
     cin.ignore();
 }
 
@@ -98,6 +98,10 @@ void Todo::createEvent() {
 
     lseek(fd, SEEK_CUR, -1);
     if (write(fd, (char *)getTitle().c_str(), (int)getTitle().length()) < 0) {
+        perror("write() error!");
+        exit(-2);
+    }
+    if(write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length())<0) {
         perror("write() error!");
         exit(-2);
     }
@@ -205,14 +209,15 @@ void printList(int year, int month, int date) {
     }
     char buf[2];
 
-    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
+    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {   //file open
         perror("open() error!");
         exit(-1);
     }
 
     string todo = "";
+    string keyword="";
     do {
-        memset(buf, '\0', 2);
+        memset(buf, '\0', 2);                       //initialize buf '\0'
         if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
@@ -220,16 +225,15 @@ void printList(int year, int month, int date) {
         if (rSize < 1)
             break;
         if (strcmp(buf, "\n") != 0) {
+            //setkw(keyword, dirname, todo);
             todo += buf;
-
         } else {
             y += 2;
             gotoxy(95, y);
-            printWithBg(WHTE, BLCK, "?");
+            printWithBg(WHTE, BLCK, "! ");
             printWithBg(WHTE, BLCK, todo);
             todo = "";
         }
-
     } while (rSize > 0);
 
     close(fd);
@@ -249,6 +253,7 @@ void printList(int year, int month, int date) {
             perror("read() error!");
             exit(-3);
         }
+        
         if (rSize < 1)
             break;
 
@@ -258,7 +263,7 @@ void printList(int year, int month, int date) {
         } else {
             y += 2;
             gotoxy(95, y);
-            printWithBg(WHTE, BLCK, "?");
+            printWithBg(WHTE, BLCK, "V ");
             printWithBg(WHTE, BLCK, todo);
             todo = "";
         }

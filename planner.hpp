@@ -2,7 +2,6 @@
 #define __PLANNER_HPP__
 
 #include "display.hpp"
-#include "keyword.hpp"
 #include <iostream>
 #include <string>
 
@@ -27,9 +26,11 @@ class Todo {
     int getYear();
     int getMonth();
     std::string getTitle();
+    std::string getKeyword();
 
     void setDate(int year, int month, int date);
     void setTitle(std::string title);
+    void setKeyword(std::string keyword);
 
   private:
     std::string category;
