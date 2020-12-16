@@ -120,37 +120,25 @@ void Keyword::setkw(vector<string> keyword,
     }
 }
 
-void Keyword::findkw(string keyword) {
+void Keyword::findkw() {
     map<string, vector<vector<string>>>::iterator it;
-
     resetDisplay(97, 7, 32, 5);
+    gotoxy(97, 7);
+    printWithBg(WHTE, BLCK, "keyword: ");
+    cin >> keyword;
 
     it = kwMap.find(keyword);
     if (it == kwMap.end()) {
-        gotoxy(120, 10);
-        cout << "no exist" << endl;
-        return;
-    } else {
-        cout << it->second.size();
-
-        for (int i = 0; i < it->second.size(); i++) {
-            gotoxy(98, 8 + i);
-            cout << it->second[i][0] << "-" << it->second[i][1] << endl;
+        gotoxy(100, 10);
+        printWithBg(WHTE,BLCK,"no exist");
+        //return;
+    } 
+    else {
+        for (int i = 0; i < it->second.size() && i < 5; i++) {
+            gotoxy(97, 9 + i);
+            printWithBg(WHTE,BLCK,it->second[i][0] + " : " + it->second[i][1]);
         }
     }
-}
-
-void Keyword::allShow() {
-    int y = 8;
-    map<string, vector<vector<string>>>::iterator it = kwMap.begin();
-
-    for (int i = 0; it != kwMap.end(); it++, i++) {
-        gotoxy(98, y++);
-        cout << it->first << endl;
-        for (int j = 0; j < it->second.size(); j++) {
-            gotoxy(98, y++);
-            cout << it->second[j][0] << "-" << it->second[j][1] << endl;
-        }
-    }
-    kbhit();
+    cin.ignore();
+    while(kbhit()!=ENTER);
 }

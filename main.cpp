@@ -70,6 +70,7 @@ int main(void) {
                             goto END;
                             break;
                         case KEYWORD:
+                            keyword.findkw();
                             break;
                         }
                     }

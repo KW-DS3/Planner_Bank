@@ -403,7 +403,7 @@ void plannerMenuKeyword() {
     gotoxy(112, 9);
     printWithBg(WHTE, BLCK, "  Previous");
     gotoxy(97, 11);
-    printWithBg(BLUE, BLCK, " > Keyword");
+    printWithBg(BLUE, BLCK, "> Keyword");
 }
 
 int numOfEvents(int year, int month, int date) {

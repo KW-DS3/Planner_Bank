@@ -13,11 +13,12 @@ class Keyword {
   public:
     void init();
     void setkw(vector<string> keyword, string dirname);
-    void findkw(string keyword);
+    void findkw();
     void allShow();
 
   private:
     map<string, vector<vector<string>>> kwMap;
+    string keyword;
 };
 
 #endif //__KEYWORD_HPP__
