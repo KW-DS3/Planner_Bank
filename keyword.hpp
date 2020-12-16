@@ -9,12 +9,14 @@
 
 using namespace std;
 
-class Keyword{
-public:
-    Keyword();
+class Keyword {
+  public:
+    void init();
     void setkw(vector<string> keyword, string dirname);
     void findkw(string keyword);
-private:
+    void allShow();
+
+  private:
     map<string, vector<vector<string>>> kwMap;
 };
 

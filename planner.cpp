@@ -74,7 +74,7 @@ void Todo::inputEvent() {
     cin.ignore();
 }
 
-void Todo::createEvent() {
+void Todo::createEvent(Keyword &keyword) {
     inputEvent();
 
     int fd;
@@ -82,6 +82,7 @@ void Todo::createEvent() {
         convert(getYear()) + convert(getMonth()) + convert(getDate());
 
     string pathname = dirname + "/" + INCOMPLETE;
+    vector<string> key = {getTitle(), getKeyword()};
 
     if (!checkFileExists(dirname)) {
         if (mkdir(dirname.c_str(), PERMS) < 0) {
@@ -99,10 +100,14 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
-    if (write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length()) <
-        0) {
-        perror("write() error!");
-        exit(-2);
+
+    if (getKeyword() != "-") {
+        if (write(fd, (char *)getKeyword().c_str(),
+                  (int)getKeyword().length()) < 0) {
+            perror("write() error!");
+            exit(-2);
+        }
+        keyword.setkw(key, dirname);
     }
     if (write(fd, "\n", 1) < 0) {
         perror("write() error!");
@@ -224,10 +229,9 @@ void printList(int year, int month, int date) {
             perror("read() error!");
             exit(-3);
         }
-        if (strcmp(buf, "-")==0) {
+        if (strcmp(buf, "-") == 0) {
             continue;
-        }
-        else if (strcmp(buf, "#") == 0) {
+        } else if (strcmp(buf, "#") == 0) {
             index++;
         } else if (strcmp(buf, "\n") != 0) {
             keys[index] += buf;
@@ -235,7 +239,7 @@ void printList(int year, int month, int date) {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "! ");
-            //KW.setkw(keys, dirname);
+            // KW.setkw(keys, dirname);
 
             for (int i = 0; i < index + 1; i++) {
                 if (i == 0)
@@ -247,10 +251,6 @@ void printList(int year, int month, int date) {
             index = 0;
         }
     } while (rSize > 0);
-<<<<<<< HEAD
-=======
-    // setkw(keys, dirname);
->>>>>>> 0953e5176e34ba1832f70febae77f918f789175f
     close(fd);
 
     pathname = dirname + '/' + COMPLETE;
@@ -271,10 +271,9 @@ void printList(int year, int month, int date) {
             exit(-3);
         }
 
-        if(strcmp(buf, "-")==0){
+        if (strcmp(buf, "-") == 0) {
             continue;
-        }
-        else if (strcmp(buf, "#") == 0) {
+        } else if (strcmp(buf, "#") == 0) {
             index++;
         } else if (strcmp(buf, "\n") != 0) {
             keys[index] += buf;
