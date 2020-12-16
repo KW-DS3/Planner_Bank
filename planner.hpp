@@ -27,9 +27,11 @@ class Todo {
     int getYear();
     int getMonth();
     std::string getTitle();
+    std::string getKeyword();
 
     void setDate(int year, int month, int date);
     void setTitle(std::string title);
+    void setKeyword(std::string keyword);
 
   private:
     std::string category;
@@ -56,7 +58,7 @@ std::string deleteEvent(int year, int month, int date, int index);
 void printList(int year, int month, int date);
 void gotoDate(int *year, int *month, int *date);
 
-void inputEvent(Todo todo);
+//void inputEvent(Todo todo);
 void markEvent(int year, int month, int date, int index);
 void plannerMenuCreate();
 void plannerMenuGotoDate();

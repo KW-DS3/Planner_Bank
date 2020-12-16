@@ -31,7 +31,6 @@ int main(void) {
             signin();
             while (1) {
                 menu = chooseMenu();
-                printCalendar(year, month, date);
                 if (menu == LEDGER) {
                     if (mkdir("LEDGER", PERMS) == -1) {
                         chdir("LEDGER");
@@ -49,6 +48,7 @@ int main(void) {
                         chdir("PLANNER");
                     }
                     while (1) {
+                        printCalendar(year, month, date);
                         printList(year, month, date);
                         menu = choosePlannerMenu(year, month, date);
                         switch (menu) {

@@ -93,11 +93,11 @@ int numberOfDays(int monthNumber, int year) {
         break;
     }
 }
-
+void Check_Todo() {}
 // print calendar for that month
 void printCalendar(int year, int month, int date) {
     resetDisplay();
-
+    int gap = 0;
     int days, k;
     int current = dayNumber(1, month, year);
     string monthAndYear = getMonthName(month - 1) + ' ' + to_string(year);
@@ -107,6 +107,7 @@ void printCalendar(int year, int month, int date) {
     gotoxy(38, 3);
     printWithBg(WHTE, BLCK, "[ " + monthAndYear + " ]");
     reset;
+
     gotoxy(11, 6);
     printWithBg(RED, BLCK, "S");
     printWithBg(
@@ -125,18 +126,57 @@ void printCalendar(int year, int month, int date) {
 
         if (j < 10) {
             if (date == j) {
-                printWithBg(WHTE, BLCK, "          ");
-                printWithBg(BLUE, BLCK, to_string(j));
-            } else
-                printWithBg(WHTE, BLCK, "          " + to_string(j));
+                if (gap > 0) {
+                    printWithBg(WHTE, BLCK, "        ");
+                    printWithBg(BLUE, BLCK, to_string(j));
+                    gap = 0;
+                } else {
+                    printWithBg(WHTE, BLCK, "          ");
+                    printWithBg(BLUE, BLCK, to_string(j));
+                }
+                if (numOfEvents(year, month, j) > 0) {
+                    printWithBg(YLLW, BLCK, " *");
+                    gap++;
+                }
+            } else {
+                if (gap > 0) {
+                    printWithBg(WHTE, BLCK, "        " + to_string(j));
+                    gap = 0;
+                } else {
+                    printWithBg(WHTE, BLCK, "          " + to_string(j));
+                }
+                if (numOfEvents(year, month, j) > 0) {
+                    printWithBg(YLLW, BLCK, " *");
+                    gap++;
+                }
+            }
 
         } else {
             if (date == j) {
-                printWithBg(WHTE, BLCK, "         ");
-                printWithBg(BLUE, BLCK, to_string(j));
-
-            } else
-                printWithBg(WHTE, BLCK, "         " + to_string(j));
+                if (gap > 0) {
+                    printWithBg(WHTE, BLCK, "         ");
+                    printWithBg(BLUE, BLCK, to_string(j));
+                    gap = 0;
+                } else {
+                    printWithBg(WHTE, BLCK, "           ");
+                    printWithBg(BLUE, BLCK, to_string(j));
+                }
+                if (numOfEvents(year, month, j) > 0) {
+                    printWithBg(YLLW, BLCK, " *");
+                    gap++;
+                }
+            } else {
+                if (gap > 0) {
+                    printWithBg(WHTE, BLCK, "       " + to_string(j));
+                    gap = 0;
+                } else {
+                    printWithBg(WHTE, BLCK, "         " + to_string(j));
+                }
+                if (numOfEvents(year, month, j) > 0) {
+                    printWithBg(YLLW, BLCK, " *");
+                    gap++;
+                }
+            }
         }
 
         if (++k > 6) {
@@ -212,6 +252,7 @@ void firstMenu() {
 
     reset;
 }
+
 void loginDisplay() {
     firstMenu();
     gotoxy(42, 27);

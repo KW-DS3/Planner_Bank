@@ -2,11 +2,9 @@
 
 #include <cstring>
 #include <fcntl.h>
-#include <iostream>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -29,6 +27,7 @@ int Todo::getDate() { return when.date; }
 int Todo::getMonth() { return when.month; }
 int Todo::getYear() { return when.year; }
 string Todo::getTitle() { return title; }
+string Todo::getKeyword() { return keyword; }
 
 void Todo::setDate(int year, int month, int date) {
     when.year = year;
@@ -36,6 +35,7 @@ void Todo::setDate(int year, int month, int date) {
     when.date = date;
 }
 void Todo::setTitle(string title) { this->title = title; }
+void Todo::setKeyword(string keyword) { this->keyword = keyword; }
 
 string convert(int date) {
     if (date < 10)
@@ -54,9 +54,6 @@ void Todo::inputEvent() {
         cin >> when.year >> when.month >> when.date;
         if (when.month < 0 || when.month > 12 || when.date < 0 ||
             when.date > numberOfDays(when.month, when.year)) {
-
-            // gotoxy(95, 8);
-            // printWithBg(WHTE, BLCK, "wrong input! try again");
             continue;
         } else
             break;
@@ -72,7 +69,7 @@ void Todo::inputEvent() {
 
     setDate(when.year, when.month, when.date);
     setTitle(title);
-    // setKeyword(title, keyword);
+    setKeyword(keyword);
     cin.ignore();
 }
 
@@ -101,10 +98,16 @@ void Todo::createEvent() {
         perror("write() error!");
         exit(-2);
     }
+    if (write(fd, (char *)getKeyword().c_str(), (int)getKeyword().length()) <
+        0) {
+        perror("write() error!");
+        exit(-2);
+    }
     if (write(fd, "\n", 1) < 0) {
         perror("write() error!");
         exit(-2);
     }
+
     close(fd);
 }
 
@@ -192,6 +195,8 @@ void printList(int year, int month, int date) {
     string pathname = dirname + '/' + INCOMPLETE;
     ssize_t rSize = 0;
     struct stat statBuf;
+    vector<string> keys(6);
+    int i = 0;
 
     resetDisplay(93, 7, 35, 27);
 
@@ -205,33 +210,34 @@ void printList(int year, int month, int date) {
     }
     char buf[2];
 
-    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
+    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) { // file open
         perror("open() error!");
         exit(-1);
     }
+    string todo;
 
-    string todo = "";
     do {
-        memset(buf, '\0', 2);
+        memset(buf, '\0', 2); // initialize buf '\0'
         if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
         if (rSize < 1)
             break;
-        if (strcmp(buf, "\n") != 0) {
-            todo += buf;
 
+        if (strcmp(buf, "#") == 0) {
+            i++;
+        } else if (strcmp(buf, "\n") != 0) {
+            keys[i] += buf;
         } else {
             y += 2;
             gotoxy(95, y);
-            printWithBg(WHTE, BLCK, "?");
-            printWithBg(WHTE, BLCK, todo);
-            todo = "";
+            printWithBg(WHTE, BLCK, "! ");
+            printWithBg(WHTE, BLCK, keys[i]);
+            keys[0] = "";
         }
-
     } while (rSize > 0);
-
+    setkw(keys, dirname);
     close(fd);
 
     pathname = dirname + '/' + COMPLETE;
@@ -249,6 +255,7 @@ void printList(int year, int month, int date) {
             perror("read() error!");
             exit(-3);
         }
+
         if (rSize < 1)
             break;
 
@@ -258,7 +265,7 @@ void printList(int year, int month, int date) {
         } else {
             y += 2;
             gotoxy(95, y);
-            printWithBg(WHTE, BLCK, "?");
+            printWithBg(WHTE, BLCK, "V ");
             printWithBg(WHTE, BLCK, todo);
             todo = "";
         }
@@ -374,7 +381,7 @@ void plannerMenuKeyword() {
     gotoxy(112, 9);
     printWithBg(WHTE, BLCK, "  Previous");
     gotoxy(97, 11);
-    printWithBg(BLUE, BLCK, " > Keyword");
+    printWithBg(BLUE, BLCK, "> Keyword");
 }
 
 int numOfEvents(int year, int month, int date) {
