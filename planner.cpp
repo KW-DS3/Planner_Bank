@@ -243,7 +243,7 @@ void printList(int year, int month, int date) {
             index = 0;
         }
     } while (rSize > 0);
-    setkw(keys, dirname);
+    // setkw(keys, dirname);
     close(fd);
 
     pathname = dirname + '/' + COMPLETE;
