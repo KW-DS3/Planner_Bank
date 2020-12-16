@@ -1,30 +1,23 @@
 #include "keyword.hpp"
 
-void Keyword::setkw(string title, string kw){
-    vector<string> kwVector;
-    this->title=title;
-    this->kw=kw;
-    kwVector.push_back(kw);
-    kwMap.insert(make_pair(title, kwVector));
+void setkw(vector<string> keyword, string dirname){
+    vector<vector<string>>vec0;
+    vector<string>vec1;     //date(dirname)
+    vector<string>vec2;     //todo
+
+    vec1.push_back(dirname);
+    vec2.push_back(keyword[0]);
+    vec0.push_back(vec1);
+    vec0.push_back(vec2);
+
+    for(int i=1;i<keyword.size();i++)
+        kwMap.insert(make_pair(keyword[i], vec0));
 }
 
-void Keyword::findkw(string title, string kw){
-
-}
-
-void Keyword::modifykw(string title, string kw){
-    
-}
-
-void Keyword::deletekw(string title, string kw){
-    
-}
-
-void Keyword::printkw(string title, string kw){
-    if(kwMap.find(title) == kwMap.end())
+void findkw(string keyword){
+    if(kwMap.find(keyword)==kwMap.end()) {
         cout<<"no exist"<<endl;
-    else{
-            
+    } else {
+        //
     }
-    
 }

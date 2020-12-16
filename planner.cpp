@@ -2,11 +2,9 @@
 
 #include <cstring>
 #include <fcntl.h>
-#include <iostream>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -29,7 +27,7 @@ int Todo::getDate() { return when.date; }
 int Todo::getMonth() { return when.month; }
 int Todo::getYear() { return when.year; }
 string Todo::getTitle() { return title; }
-string Todo::getKeyword() { return keyword; }
+string Todo::getKeyword() { return keyword;}
 
 void Todo::setDate(int year, int month, int date) {
     when.year = year;
@@ -196,7 +194,6 @@ void printList(int year, int month, int date) {
     string pathname = dirname + '/' + INCOMPLETE;
     ssize_t rSize = 0;
     struct stat statBuf;
-
     resetDisplay(93, 7, 35, 27);
 
     gotoxy(102, y);
@@ -209,23 +206,23 @@ void printList(int year, int month, int date) {
     }
     char buf[2];
 
-    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
+    if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {   //file open
         perror("open() error!");
         exit(-1);
     }
-
-    string todo = "";
+    string todo;
+    
     do {
-        memset(buf, '\0', 2);
+        memset(buf, '\0', 2);                       //initialize buf '\0'
         if ((rSize = read(fd, buf, 1)) < 0) {
             perror("read() error!");
             exit(-3);
         }
         if (rSize < 1)
             break;
+
         if (strcmp(buf, "\n") != 0) {
             todo += buf;
-
         } else {
             y += 2;
             gotoxy(95, y);
@@ -233,7 +230,6 @@ void printList(int year, int month, int date) {
             printWithBg(WHTE, BLCK, todo);
             todo = "";
         }
-
     } while (rSize > 0);
 
     close(fd);
@@ -253,6 +249,7 @@ void printList(int year, int month, int date) {
             perror("read() error!");
             exit(-3);
         }
+        
         if (rSize < 1)
             break;
 
