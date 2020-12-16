@@ -36,11 +36,11 @@ void addBank(date date) {
     char check;
     string category;
 
-    cout << "금액을 입력해주세요: ";
+    cout << "Please enter the amount: ";
     cin >> money;
-    cout << "수입(i)/지출(e)를 입력해주세요: ";
+    cout << "Please enter Income or Expense (i/e): ";
     cin >> check;
-    cout << "카테고리를 입력해주세요: ";
+    cout << "Please enter Category: ";
     cin >> category;
 
     if (check == 'e')
