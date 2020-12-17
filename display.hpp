@@ -34,7 +34,8 @@ int dayNumber(int day, int month, int year);
 std::string getMonthName(int monthNumber);
 int numberOfDays(int monthNumber, int year);
 
-void printCalendar(int year, int month, int date);
+void printCalendar(int year, int month, int date,
+                   int mode); // mode : 0 - ledger, 1 - planner
 
 void loginDisplay();
 int chooseLogin();
@@ -47,6 +48,7 @@ void firstMenuLedger();
 void firstMenuPlanner();
 
 int choosePlannerMenu(int year, int month, int date);
+int chooseLedgerMenu();
 
 int chooseEvent(int year, int month, int date);
 #endif

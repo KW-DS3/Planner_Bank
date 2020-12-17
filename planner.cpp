@@ -239,7 +239,6 @@ void printList(int year, int month, int date) {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "! ");
-            // KW.setkw(keys, dirname);
 
             for (int i = 0; i < index + 1; i++) {
                 if (i == 0)
@@ -281,7 +280,6 @@ void printList(int year, int month, int date) {
             y += 2;
             gotoxy(95, y);
             printWithBg(WHTE, BLCK, "V ");
-            KW.setkw(keys, dirname);
 
             for (int i = 0; i < index + 1; i++) {
                 if (i == 0)
@@ -306,7 +304,7 @@ void gotoDate(int *year, int *month, int *date) {
     printWithBg(WHTE, BLCK, "date: ");
     cin >> *year >> *month >> *date;
 
-    printCalendar(*year, *month, *date);
+    printCalendar(*year, *month, *date, 1);
     cin.ignore();
 }
 

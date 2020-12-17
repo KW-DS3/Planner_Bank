@@ -3,8 +3,8 @@
 
 #include "bank.hpp"
 
-void addBank(date date);
-void delBank(date date);
-char checkBank(date date);
+void addBank(Date date);
+void delBank(Date date);
+char checkBank(Date date);
 
 #endif

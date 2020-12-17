@@ -5,13 +5,14 @@
 
 using namespace std;
 
-class date {
+class Date {
   public:
-    date();
-    date(int year, int month, int day);
+    Date();
+    Date(int year, int month, int day);
     int getYear();
     int getMonth();
     int getDay();
+    void setDate(int *year, int *month, int *day);
 
   private:
     int year;
@@ -22,15 +23,28 @@ class date {
 class BankRecord {
   public:
     BankRecord();
-    BankRecord(date date, int money, string category);
-    date getDate();
+    BankRecord(Date date, int money, string category);
+    Date getDate();
     int getMoney();
     string getCategory();
 
   private:
-    date when;
+    Date when;
     int money;
     string category;
 };
 
+enum ledgerMenu {
+    ADD,
+    DEL,
+    CHECK,
+    DATE,
+    PRE,
+    KEY,
+};
+void ledgerMenuPrevious();
+void ledgerMenuCheck();
+void ledgerMenuDelete();
+void ledgerMenuGotoDate();
+void ledgerMenuAdd();
 #endif

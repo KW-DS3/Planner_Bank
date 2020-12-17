@@ -1,5 +1,6 @@
 #include "bank_function.hpp"
 #include "bank.hpp"
+#include "display.hpp"
 
 #include <cstring>
 #include <fcntl.h>
@@ -17,47 +18,51 @@
 
 using namespace std;
 
-string convert(int date) {
+string ledgerConvert(int date) {
     if (date < 10)
         return '0' + to_string(date);
     else
         return to_string(date);
 }
 
-bool checkFileExists(std::string filename) {
+bool checkFile(std::string filename) {
     if (access(filename.c_str(), F_OK) < 0) {
         return 0;
     }
     return 1;
 }
 
-void addBank(date date) {
+void addBank(Date date) {
     int money;
     char check;
     string category;
 
-    cout << "Please enter the amount: ";
+    gotoxy(97, 15);
+    printWithBg(WHTE, BLCK, "Amount: ");
     cin >> money;
-    cout << "Please enter Income or Expense (i/e): ";
+    gotoxy(97, 17);
+    printWithBg(WHTE, BLCK, "Income or Expense (i/e): ");
     cin >> check;
-    cout << "Please enter Category: ";
+    gotoxy(97, 19);
+    printWithBg(WHTE, BLCK, "Category: ");
     cin >> category;
+    resetDisplay(97, 15, 32, 5);
 
     if (check == 'e')
         money = -money;
     BankRecord newInput(date, money, category);
 
     int fd = 0;
-    string dirname = convert(newInput.getDate().getYear()) +
-                     convert(newInput.getDate().getMonth()) +
-                     convert(newInput.getDate().getDay());
+    string dirname = ledgerConvert(newInput.getDate().getYear()) +
+                     ledgerConvert(newInput.getDate().getMonth()) +
+                     ledgerConvert(newInput.getDate().getDay());
     string pathname;
     if (newInput.getMoney() >= 0)
         pathname = dirname + "/" + "IncomeList.txt";
     else
         pathname = dirname + "/" + "ExpenseList.txt";
 
-    if (!checkFileExists(dirname)) {
+    if (!checkFile(dirname)) {
         if (mkdir(dirname.c_str(), PERMS) < 0) {
             perror("mkdir() error!");
         }
@@ -90,17 +95,21 @@ void addBank(date date) {
     }
 
     close(fd);
+    cin.ignore();
 }
 
-void delBank(date date) {
+void delBank(Date date) {
     int index = 0;
     int fd, fd1, num = 1;
     int select = checkBank(date);
-    cout << "Which one do you want to delete?(enter index number): ";
+    resetDisplay(97, 15, 32, 1);
+    gotoxy(97, 15);
+    printWithBg(WHTE, BLCK, "Delet index number: ");
     cin >> index;
 
-    string dirname = convert(date.getYear()) + convert(date.getMonth()) +
-                     convert(date.getDay());
+    string dirname = ledgerConvert(date.getYear()) +
+                     ledgerConvert(date.getMonth()) +
+                     ledgerConvert(date.getDay());
     string pathname;
     string pathname1 = dirname + '/' + "temp.txt";
     ssize_t rSize = 0;
@@ -157,10 +166,15 @@ void delBank(date date) {
     remove(pathname.c_str());
     rename(pathname1.c_str(), pathname.c_str());
 
-    cout << "Deleted successfully." << endl;
+    resetDisplay(97, 15, 32, 5);
+    gotoxy(97, 15);
+    printWithBg(WHTE, BLCK, "Deleted successfully.");
+    cin.ignore();
+    while (kbhit() != ENTER)
+        ;
 }
 
-char checkBank(date date) {
+char checkBank(Date date) {
     int fd = 0;
     int index = 1;
     char buf[2] = {
@@ -169,25 +183,37 @@ char checkBank(date date) {
     ssize_t rSize = 0;
     ssize_t tSize = 0;
     char select = 0;
-    cout << "Would you like to check your Income(i) or Expense(e)?: ";
+    int y = 19;
+    gotoxy(97, 15);
+    printWithBg(WHTE, BLCK, "Income or Expense (i/e): ");
     cin >> select;
 
     if (select == 'i') {
-        string dirname = convert(date.getYear()) + convert(date.getMonth()) +
-                         convert(date.getDay());
+        string dirname = ledgerConvert(date.getYear()) +
+                         ledgerConvert(date.getMonth()) +
+                         ledgerConvert(date.getDay());
         string pathname = dirname + '/' + "IncomeList.txt";
 
-        if (!checkFileExists(dirname)) {
-            cout << "No income and no expenses!" << endl;
+        gotoxy(97, 17);
+        if (!checkFile(dirname)) {
+            printWithBg(WHTE, BLCK, "No income and no expenses!");
+
+            return 'x';
+        }
+        if (!checkFile(pathname)) {
+            printWithBg(WHTE, BLCK, "No income!");
+
             return 'x';
         }
 
-        cout << "[Income List of " << dirname << "]" << endl;
+        printWithBg(WHTE, BLCK, "[Income List of " + dirname + "]");
         if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) { // file open
             perror("open() error!");
             exit(-1);
         }
-        cout << "(" << index << ") ";
+
+        gotoxy(97, y);
+        printWithBg(WHTE, BLCK, "(" + to_string(index) + ")");
         do {
             memset(buf, '\0', 2); // initialize buf '\0'
             if ((rSize = read(fd, buf, 1)) < 0) {
@@ -198,29 +224,47 @@ char checkBank(date date) {
                 break;
             if (strcmp(buf, "\n") == 0) {
                 index++;
-                cout << buf;
-                cout << "(" << index << ") ";
-
+                y += 1;
+                gotoxy(97, y);
+                printWithBg(WHTE, BLCK, "(" + to_string(index) + ")");
             } else
-                cout << buf;
+                printWithBg(WHTE, BLCK, buf);
 
         } while (rSize > 0);
+        printWithBg(WHTE, BLCK, "\b\b\b\b");
+        printWithBg(WHTE, BLCK, "      ");
+        printWithBg(WHTE, BLCK, "\b\b\b\b");
         close(fd);
         return select;
     }
 
     else if (select == 'e') {
 
-        string dirname = convert(date.getYear()) + convert(date.getMonth()) +
-                         convert(date.getDay());
+        string dirname = ledgerConvert(date.getYear()) +
+                         ledgerConvert(date.getMonth()) +
+                         ledgerConvert(date.getDay());
         string pathname = dirname + '/' + "ExpenseList.txt";
-        cout << "[Expense List of " << dirname << "]" << endl;
+        gotoxy(97, 17);
+        if (!checkFile(dirname)) {
+            printWithBg(WHTE, BLCK, "No income and no expenses!");
+
+            return 'x';
+        }
+        if (!checkFile(pathname)) {
+            printWithBg(WHTE, BLCK, "No expenses!");
+
+            return 'x';
+        }
+
+        printWithBg(WHTE, BLCK, "[Expense List of " + dirname + "]");
+
         if ((fd = open(pathname.c_str(), O_RDONLY, PERMS)) < 0) {
             perror("open() error!");
             exit(-1);
         }
 
-        cout << "(" << index << ") ";
+        gotoxy(97, y);
+        printWithBg(WHTE, BLCK, "(" + to_string(index) + ")");
         do {
             memset(buf, '\0', 2);
             if ((rSize = read(fd, buf, 1)) < 0) {
@@ -233,14 +277,17 @@ char checkBank(date date) {
 
             if (strcmp(buf, "\n") == 0) {
                 index++;
-                cout << buf;
-                cout << "(" << index << ") ";
+                y += 1;
+                gotoxy(97, y);
+                printWithBg(WHTE, BLCK, "(" + to_string(index) + ")");
 
             } else
-                cout << buf;
+                printWithBg(WHTE, BLCK, buf);
 
         } while (rSize > 0);
-
+        printWithBg(WHTE, BLCK, "\b\b\b\b");
+        printWithBg(WHTE, BLCK, "      ");
+        printWithBg(WHTE, BLCK, "\b\b\b\b");
         close(fd);
         return select;
     }
@@ -249,4 +296,5 @@ char checkBank(date date) {
         cout << "Wrong choice!" << endl;
         return 'x';
     }
+    resetDisplay(97, 15, 32, 5);
 }

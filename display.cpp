@@ -1,4 +1,5 @@
 #include "display.hpp"
+#include "bank.hpp"
 #include "planner.hpp"
 
 #include <cstring>
@@ -95,7 +96,7 @@ int numberOfDays(int monthNumber, int year) {
 }
 
 // print calendar for that month
-void printCalendar(int year, int month, int date) {
+void printCalendar(int year, int month, int date, int mode) {
     resetDisplay();
     int gap = 0;
     int days, k;
@@ -134,7 +135,7 @@ void printCalendar(int year, int month, int date) {
                     printWithBg(WHTE, BLCK, "          ");
                     printWithBg(BLUE, BLCK, to_string(j));
                 }
-                if (numOfEvents(year, month, j) > 0) {
+                if (mode == 1 && numOfEvents(year, month, j) > 0) {
                     printWithBg(YLLW, BLCK, " *");
                     gap++;
                 }
@@ -145,7 +146,7 @@ void printCalendar(int year, int month, int date) {
                 } else {
                     printWithBg(WHTE, BLCK, "          " + to_string(j));
                 }
-                if (numOfEvents(year, month, j) > 0) {
+                if (mode == 1 && numOfEvents(year, month, j) > 0) {
                     printWithBg(YLLW, BLCK, " *");
                     gap++;
                 }
@@ -161,7 +162,7 @@ void printCalendar(int year, int month, int date) {
                     printWithBg(WHTE, BLCK, "         ");
                     printWithBg(BLUE, BLCK, to_string(j));
                 }
-                if (numOfEvents(year, month, j) > 0) {
+                if (mode == 1 && numOfEvents(year, month, j) > 0) {
                     printWithBg(YLLW, BLCK, " *");
                     gap++;
                 }
@@ -172,7 +173,7 @@ void printCalendar(int year, int month, int date) {
                 } else {
                     printWithBg(WHTE, BLCK, "         " + to_string(j));
                 }
-                if (numOfEvents(year, month, j) > 0) {
+                if (mode == 1 && numOfEvents(year, month, j) > 0) {
                     printWithBg(YLLW, BLCK, " *");
                     gap++;
                 }
@@ -446,6 +447,58 @@ int choosePlannerMenu(int year, int month, int date) {
 
     return menu;
 }
+
+int chooseLedgerMenu() {
+
+    int menu = 0, value, index = 0;
+
+    ledgerMenuAdd();
+    do {
+        value = kbhit();
+
+        switch (value) {
+        case LEFT: {
+            resetDisplay(93, 14, 1, 15);
+            if (menu == 0)
+                menu = 4;
+            else
+                menu--;
+            break;
+        }
+        case RIGHT: {
+            resetDisplay(93, 14, 1, 15);
+
+            if (menu == 4)
+                menu = 0;
+            else
+                menu++;
+            break;
+        }
+
+        } // switch (value)
+        switch (menu) {
+        case ADD:
+            ledgerMenuAdd();
+            break;
+        case DEL:
+            ledgerMenuDelete();
+            break;
+        case DATE:
+            ledgerMenuGotoDate();
+            break;
+        case PRE:
+            ledgerMenuPrevious();
+            break;
+        case CHECK:
+            ledgerMenuCheck();
+            break;
+        } // switch (menu)
+
+    } while (value != ENTER);
+
+    return menu;
+}
+
 //삭제할 이벤트 커서로 고르기
 int chooseEvent(int year, int month, int date) {
     int value;
